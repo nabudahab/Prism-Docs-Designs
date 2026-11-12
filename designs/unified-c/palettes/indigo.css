@@ -1,0 +1,27 @@
+/* Indigo and slate: blue-grey slate for paper, rules and chrome, with indigo
+   for links, focus and the current-page mark. */
+:root {
+  --paper: #F7F8FB; --surface: #FFFFFF; --sunken: #ECEEF4; --chrome: #EEF0F6;
+  --ink: #1C2231; --muted: #515A6F; --rule: #D7DBE5; --rule-strong: #858EA4;
+  --link: #3730A3; --focus: #4F46E5; --accent: #4338CA; --on-accent: #FFFFFF;
+  --ok: #1D6B43; --caution: #855000; --error: #B0213F; --warn-bg: #FBF3E0;
+  --c-cache: #7A3FD0; --c-bus: #0D6D86; --c-mmio: #92570A; --c-system: #C2304E;
+  --beam-paper: #1A2033; --beam-surface: #232A3F; --beam-ink: #F1F3F9; --beam-muted: #B9C0D4; --beam-rule: #4B556E;
+  --beam-system: #FF9FB4; --beam-mmio: #F2C470; --beam-bus: #6FD3E6; --beam-cache: #C3B4FF;
+}
+:root[data-theme="dark"] {
+  --paper: #121522; --surface: #1A1E2E; --sunken: #0D1019; --chrome: #161A28;
+  --ink: #E6E9F3; --muted: #A4ACC2; --rule: #2C3247; --rule-strong: #5A6482;
+  --link: #A5B4FC; --focus: #A5B4FC; --accent: #A5B4FC; --on-accent: #121522;
+  --ok: #6EDCA0; --caution: #EDBB5E; --error: #FF94A8; --warn-bg: #2C2717;
+  --c-cache: #C3B0FF; --c-bus: #5FD0E2; --c-mmio: #F0B84A; --c-system: #FF8AA3;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #121522; --surface: #1A1E2E; --sunken: #0D1019; --chrome: #161A28;
+    --ink: #E6E9F3; --muted: #A4ACC2; --rule: #2C3247; --rule-strong: #5A6482;
+    --link: #A5B4FC; --focus: #A5B4FC; --accent: #A5B4FC; --on-accent: #121522;
+    --ok: #6EDCA0; --caution: #EDBB5E; --error: #FF94A8; --warn-bg: #2C2717;
+    --c-cache: #C3B0FF; --c-bus: #5FD0E2; --c-mmio: #F0B84A; --c-system: #FF8AA3;
+  }
+}

@@ -1,0 +1,31 @@
+/* Databook: the wild palette. The signal yellow of a semiconductor data book,
+   printed in black with a red second colour; after dark it inverts to black
+   with yellow marks. Amber cannot be read on yellow, so the peripheral layer
+   darkens to umber in the light theme and returns to orange in the dark one. */
+
+:root {
+  --paper: #FFD92E; --surface: #FFF8D6; --sunken: #F0C40C; --chrome: #F7CE1A;
+  --ink: #151300; --muted: #4A4100; --rule: #D4B100; --rule-strong: #5C4E00;
+  --link: #9A1B00; --focus: #151300; --accent: #151300; --on-accent: #FFD92E;
+  --ok: #1F5C1F; --caution: #6B3D00; --error: #A8001C; --warn-bg: #FFF3B8;
+  --c-cache: #7108DC; --c-bus: #005E7D; --c-mmio: #4B1A07; --c-system: #A92227;
+  /* The Architecture beam panel stays dark in both themes. */
+  --beam-paper: #12110B; --beam-surface: #1F1D14; --beam-ink: #FFFBE6; --beam-muted: #CFC69E; --beam-rule: #8C7A1F;
+  --beam-system: #FD7EAA; --beam-mmio: #FEB263; --beam-bus: #71E3FE; --beam-cache: #9F9AFC;
+}
+:root[data-theme="dark"] {
+  --paper: #0E0D0A; --surface: #1A1812; --sunken: #060605; --chrome: #14130E;
+  --ink: #FBF3CF; --muted: #BDB48E; --rule: #3A3520; --rule-strong: #8C7A1F;
+  --link: #FFD92E; --focus: #FFD92E; --accent: #FFD92E; --on-accent: #151300;
+  --ok: #8FDB8F; --caution: #FFC46B; --error: #FF8F8F; --warn-bg: #2E2707;
+  --c-cache: #9F9AFC; --c-bus: #71E3FE; --c-mmio: #FEB263; --c-system: #FD7EAA;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E0D0A; --surface: #1A1812; --sunken: #060605; --chrome: #14130E;
+    --ink: #FBF3CF; --muted: #BDB48E; --rule: #3A3520; --rule-strong: #8C7A1F;
+    --link: #FFD92E; --focus: #FFD92E; --accent: #FFD92E; --on-accent: #151300;
+    --ok: #8FDB8F; --caution: #FFC46B; --error: #FF8F8F; --warn-bg: #2E2707;
+    --c-cache: #9F9AFC; --c-bus: #71E3FE; --c-mmio: #FEB263; --c-system: #FD7EAA;
+  }
+}

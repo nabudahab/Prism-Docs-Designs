@@ -1,0 +1,31 @@
+/* Monochrome: pure black and white, as in the Exploded view prototype.
+   Text, links, rules and controls are black on white or white on black;
+   only the four layer colours and the status colours keep a hue, because
+   they carry meaning in the diagrams. */
+:root {
+  --paper: #FFFFFF; --surface: #FFFFFF; --sunken: #F2F2F2; --chrome: #FFFFFF;
+  --ink: #000000; --muted: #474747; --rule: #CFCFCF; --rule-strong: #6B6B6B;
+  --link: #000000; --focus: #000000; --accent: #000000; --on-accent: #FFFFFF;
+  --ok: #0F6B38; --caution: #7A4A00; --error: #A8173A; --warn-bg: #FFF4D6;
+  --c-cache: #5B2FD6; --c-bus: #006A80; --c-mmio: #8A5200; --c-system: #C0213F;
+  --beam-paper: #000000; --beam-surface: #111111; --beam-ink: #FFFFFF; --beam-muted: #BDBDBD; --beam-rule: #FFFFFF;
+  --beam-system: #FF7A97; --beam-mmio: #FFC247; --beam-bus: #4FD8EA; --beam-cache: #B9A4FF;
+}
+:root[data-theme="dark"] {
+  --paper: #000000; --surface: #000000; --sunken: #121212; --chrome: #000000;
+  --ink: #FFFFFF; --muted: #BDBDBD; --rule: #333333; --rule-strong: #8A8A8A;
+  --link: #FFFFFF; --focus: #FFFFFF; --accent: #FFFFFF; --on-accent: #000000;
+  --ok: #5CE09A; --caution: #FFC94D; --error: #FF8FA3; --warn-bg: #1F1A08;
+  --c-cache: #B9A4FF; --c-bus: #4FD8EA; --c-mmio: #FFC247; --c-system: #FF7A97;
+  --beam-rule: #5C5C5C;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #000000; --surface: #000000; --sunken: #121212; --chrome: #000000;
+    --ink: #FFFFFF; --muted: #BDBDBD; --rule: #333333; --rule-strong: #8A8A8A;
+    --link: #FFFFFF; --focus: #FFFFFF; --accent: #FFFFFF; --on-accent: #000000;
+    --ok: #5CE09A; --caution: #FFC94D; --error: #FF8FA3; --warn-bg: #1F1A08;
+    --c-cache: #B9A4FF; --c-bus: #4FD8EA; --c-mmio: #FFC247; --c-system: #FF7A97;
+    --beam-rule: #5C5C5C;
+  }
+}

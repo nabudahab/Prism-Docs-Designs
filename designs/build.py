@@ -184,6 +184,21 @@ def compose(design, files, canon, hooks):
     return out
 
 
+def palettes(design, page):
+    """One page per designs/<name>/palettes/<palette>.css: the same design in other colours.
+
+    A palette sets colour tokens only. It loads after design.css, and the page
+    names it in data-palette so a palette can address a design's fixed panels.
+    """
+    link = '<link rel="stylesheet" href="assets/design/design.css">'
+    if link not in page:
+        return
+    for css in sorted((design / 'palettes').glob('*.css')):
+        name = css.stem
+        yield name, page.replace(link, link + '\n  <link rel="stylesheet" href="assets/design/palettes/' + name + '.css">', 1) \
+                        .replace('<html lang="en"', '<html lang="en" data-palette="' + name + '"', 1)
+
+
 def write(files, destination):
     if destination.exists():
         if not (destination / '.prism-generated').is_file():
@@ -225,6 +240,9 @@ def main():
             raise ValueError('Refusing to build private-document references in: ' + ', '.join(leaks))
         write(out, args.out / name)
         print('Built', args.out / name / 'index.html', 'from', root)
+        for palette, page in palettes(HERE / name, out['index.html'].decode()):
+            write(dict(out, **{'index.html': page.encode()}), args.out / (name + '-' + palette))
+            print('Built', args.out / (name + '-' + palette) / 'index.html', 'with the', palette, 'palette')
     # The side-by-side comparison page; its screenshots are made by tools/shot.cjs.
     compare = HERE / 'compare/index.html'
     if compare.is_file():

@@ -9,7 +9,8 @@ const fs = require('node:fs'), path = require('node:path'), os = require('node:o
 const { spawn } = require('node:child_process');
 const WebSocket = require('ws');
 
-const dist = path.resolve(__dirname, '../dist');
+// DESIGNS_DIST points at another build output (python3 designs/build.py --out ...).
+const dist = path.resolve(process.env.DESIGNS_DIST || path.resolve(__dirname, '../dist'));
 const designs = process.argv.slice(2).length ? process.argv.slice(2)
   : fs.readdirSync(dist).filter(name => fs.existsSync(path.join(dist, name, 'index.html')));
 
