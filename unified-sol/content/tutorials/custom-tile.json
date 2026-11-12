@@ -1,0 +1,132 @@
+{
+  "schema": "prism-tutorial-v2",
+  "key": "custom-tile",
+  "title": "Write your own core",
+  "nav_title": "Write your own core",
+  "lede": "Describe your own core in a core manifest, give it a microarchitecture package, select it and test it.",
+  "audience": "rtl",
+  "prerequisites": [
+    "The tools from [Install tools and run a simulation](#/guides/getting-started#1-install-the-tools). The Spike stage also needs Spike's headers and libraries.",
+    "A SoC manifest, as in [Build a SoC and run a program on it](#/tutorials/instantiate-core)."
+  ],
+  "outcome": "A tile that your SoC manifest can select, a passing connection test, and the steps to compare its executed instructions with Spike.",
+  "stages": [
+    {
+      "id": "ports",
+      "title": "Read what a tile must connect to",
+      "text": "A tile is a core plus whatever sits between it and memory. Every tile has the same ports: an instruction channel and a data channel to the memory fabric, interrupt inputs, and halt and flush signals.",
+      "guide": [
+        {
+          "doc": "docs/interfaces.md",
+          "section": "Tile ports"
+        },
+        {
+          "doc": "docs/interfaces.md",
+          "section": "Instruction and data channels"
+        }
+      ],
+      "see": [
+        {
+          "href": "#/architecture",
+          "text": "Architecture"
+        }
+      ]
+    },
+    {
+      "id": "manifest",
+      "title": "Describe the core",
+      "text": "A core manifest lists the core's source files and its top module. It also requests the compiler ISA and microarchitecture settings. Prism generates package headers and checks the requested ISA against the elaborated hardware. A tile manifest selects the core by naming the core manifest.",
+      "guide": [
+        {
+          "doc": "docs/adding-a-core.md",
+          "section": "1. Describe the core"
+        },
+        {
+          "doc": "docs/manifests.md",
+          "section": "Core components"
+        }
+      ]
+    },
+    {
+      "id": "tile",
+      "title": "Implement the tile ports",
+      "text": "Write the tile module that connects your core's own memory bus to the two channels.",
+      "guide": [
+        {
+          "doc": "docs/adding-a-core.md",
+          "section": "2. Implement the tile ports"
+        }
+      ]
+    },
+    {
+      "id": "test",
+      "title": "Test the connection",
+      "text": "Name the new core in a tile manifest, name that tile in your SoC manifest, then lint it and run the connection test.",
+      "guide": [
+        {
+          "doc": "docs/adding-a-core.md",
+          "section": "3. Test the connection"
+        }
+      ]
+    },
+    {
+      "id": "spike",
+      "title": "Compare with Spike",
+      "text": "Report each completed instruction from your core. Prism then runs the same program on Spike and compares the two instruction by instruction.",
+      "guide": [
+        {
+          "doc": "docs/adding-a-core.md",
+          "section": "4. Add retirement reporting"
+        },
+        {
+          "doc": "docs/verification.md",
+          "section": "3. Compare with Spike"
+        }
+      ]
+    },
+    {
+      "id": "firmware",
+      "title": "Run firmware",
+      "text": "To receive programs through the ROM loader, your core must support what the loader uses. The core manifest states what the core supports.",
+      "guide": [
+        {
+          "doc": "docs/manifests.md",
+          "section": "Core capabilities"
+        },
+        {
+          "doc": "docs/firmware.md",
+          "section": "Runtime requirements"
+        }
+      ]
+    },
+    {
+      "id": "synthesis",
+      "title": "Synthesize and run gate-level simulation",
+      "text": "Add the entry points that let Prism synthesize your core on its own, then compare the synthesized netlist with the RTL.",
+      "guide": [
+        {
+          "doc": "docs/adding-a-core.md",
+          "section": "5. Add synthesis entry points"
+        },
+        {
+          "doc": "docs/verification.md",
+          "section": "5. Run gate-level simulation"
+        }
+      ]
+    }
+  ],
+  "next": [
+    {
+      "href": "#/tutorials/instantiate-core",
+      "text": "Build a SoC and run a program on it"
+    },
+    {
+      "href": "#/tutorials/systems",
+      "text": "Put SoCs on a board"
+    },
+    {
+      "href": "#/architecture",
+      "text": "Architecture"
+    }
+  ]
+}

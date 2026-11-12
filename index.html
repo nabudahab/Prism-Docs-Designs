@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Prism website: three design directions</title>
+  <title>Prism website: design directions</title>
   <meta name="color-scheme" content="light dark">
   <style>
     :root { --paper: #FAFAF9; --ink: #16181D; --muted: #5B626E; --rule: #D9DCE1; --link: #2140C4; --band: #F0F1F3; color-scheme: light dark; }
@@ -24,7 +24,9 @@
     .shots { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 0.9rem; margin: 1.75rem 0 0; }
     figure { margin: 0; grid-column: span 4; }
     figure.wide { grid-column: span 8; }
+    figure.half { grid-column: span 6; }
     figure.phone { grid-column: span 2; }
+    ol { margin: 0.5rem 0 0; padding-left: 1.4rem; max-width: 44rem; }
     figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; background: #fff; }
     figcaption { margin-top: 0.3rem; font-size: 0.86rem; color: var(--muted); }
     .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 0 2rem; margin: 1.5rem 0 0; }
@@ -40,14 +42,46 @@
     thead th { font-size: 0.86rem; border-bottom: 2px solid var(--ink); }
     tbody th { font-weight: 600; width: 15rem; }
     .note { margin-top: 1.25rem; padding: 0.9rem 1.1rem; background: var(--band); border-left: 3px solid var(--ink); max-width: 48rem; }
-    @media (max-width: 760px) { figure, figure.wide { grid-column: span 12; } figure.phone { grid-column: span 6; } }
+    @media (max-width: 760px) { figure, figure.wide, figure.half { grid-column: span 12; } figure.phone { grid-column: span 6; } }
+    /* Progress strip: every design, one column per step. */
+    .timeline { list-style: none; display: flex; gap: 2rem; overflow-x: auto; width: 100vw; max-width: none; margin: 1.75rem 0 0 calc(50% - 50vw); padding: 0 clamp(1rem, 4vw, 3rem) 1rem; scroll-snap-type: x proximity; }
+    .timeline > li + li, .cards > li + li, .swatch li + li { margin-top: 0; }
+    .stage { flex: none; display: flex; flex-direction: column; padding-left: 1rem; border-left: 2px solid var(--ink); scroll-snap-align: start; scroll-margin-left: clamp(1rem, 4vw, 3rem); }
+    .stage-n { margin: 0; font-size: 0.8rem; font-weight: 650; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .stage h3 { margin: 0.15rem 0 0; font-size: 1.15rem; }
+    .stage-what { width: 0; min-width: 100%; font-size: 0.9rem; color: var(--muted); }
+    .cards { list-style: none; display: flex; gap: 0.9rem; max-width: none; margin: 0.9rem 0 0; padding: 0; }
+    .card { flex: none; width: 24rem; }
+    .quad { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.35rem; margin-top: 0.45rem; }
+    .quad img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; background: #fff; }
+    .card-name { margin: 0.55rem 0 0; font-weight: 650; }
+    .card-by { margin: 0; font-size: 0.85rem; color: var(--muted); }
+    /* Colour studies. */
+    .palette { margin-top: 2.75rem; padding-top: 1.25rem; border-top: 1px solid var(--rule); }
+    .palette h3 { margin: 0; font-size: 1.35rem; }
+    .palette .by { margin-left: 0.5rem; font-size: 0.86rem; font-weight: 400; color: var(--muted); }
+    .swatches { display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; margin-top: 1rem; }
+    .swatch { display: flex; align-items: center; gap: 0.6rem; }
+    .swatch-mode { width: 2.6rem; font-size: 0.86rem; color: var(--muted); }
+    .swatch ul { list-style: none; display: flex; max-width: none; margin: 0; padding: 0; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+    .swatch li { width: 2.5rem; height: 2.1rem; }
+    .swatch li span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+    .palette-shots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.7rem; margin-top: 1.1rem; }
+    .palette-shots figure { grid-column: auto; }
+    @media (max-width: 760px) { .palette-shots { grid-template-columns: repeat(2, minmax(0, 1fr)); } .palette-shots figure { grid-column: auto; } .card { width: 18rem; } }
   </style>
 </head>
 <body>
 <main>
-  <h1>Prism website: three design directions</h1>
-  <p class="lede">Each direction is a complete, navigable site. All three, and a copy of the current site for reference, are built from one content snapshot: the same pages, data, simulators and register reference. Only the shell, navigation and visual system differ.</p>
+  <h1>Prism website: design directions</h1>
+  <p class="lede">Every design so far, side by side, then Unified C in seven colour studies, then each design in detail. Every design is a complete, navigable site. All of them, and a copy of the current site for reference, are built from one content snapshot: the same pages, data, simulators and register reference. Only the shell, navigation and visual system differ.</p>
   <ul class="jump">
+    <li><a href="#progress">Progress</a></li>
+    <li><a href="#palettes">Colour studies</a></li>
+    <li><a href="#unified-c">Unified C (revised from B)</a></li>
+    <li><a href="#unified-claude">Unified A (Claude)</a></li>
+    <li><a href="#unified-sol">Unified B (GPT-6.1 Sol)</a></li>
+    <li><a href="#process">How the two were made</a></li>
     <li><a href="#datasheet">Datasheet</a></li>
     <li><a href="#coursebook">Coursebook</a></li>
     <li><a href="#exploded">Exploded view</a></li>
@@ -55,14 +89,337 @@
     <li><a href="#recommendation">Recommendation</a></li>
     <li><a href="current/index.html">Current site</a></li>
   </ul>
-  <p class="current"><a class="open" href="current/index.html">Open the current site</a> The site as it is today, built from the same content snapshot, for reading against the three directions.</p>
+  <p class="current"><a class="open" href="current/index.html">Open the current site</a> The site as it is today, built from the same content snapshot, for reading against the other designs.</p>
+
+  <!-- gallery:progress -->
+  <section id="progress">
+    <h2>Progress: every design, side by side</h2>
+    <p class="lede">Each column is one step of the design work, left to right. Every design shows its landing page (top) and core datapath page (bottom), each in the light theme (left) and the dark theme (right), so the same content can be compared across every design. Every design is a complete site built from one content snapshot; select a name to open it.</p>
+    <ol class="timeline">
+    <li class="stage">
+      <p class="stage-n">Start</p>
+      <h3>The current site</h3>
+      <p class="stage-what">The published documentation site: the starting point.</p>
+      <ol class="cards">
+        <li class="card">
+          <a class="quad" href="current/index.html"><img src="compare/current-home.png" alt="Current site, landing page, light theme." loading="lazy"><img src="compare/current-home-dark.png" alt="Current site, landing page, dark theme." loading="lazy"><img src="compare/current-datapath.png" alt="Current site, core datapath page, light theme." loading="lazy"><img src="compare/current-datapath-dark.png" alt="Current site, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="current/index.html">Current site</a></p>
+          <p class="card-by">Published site</p>
+        </li>
+      </ol>
+    </li>
+    <li class="stage">
+      <p class="stage-n">Step 1</p>
+      <h3>Three directions</h3>
+      <p class="stage-what">Three complete sites, each written for a different first reader: the engineer looking something up, the student working through a course, the visitor deciding what Prism is.</p>
+      <ol class="cards">
+        <li class="card">
+          <a class="quad" href="datasheet/index.html"><img src="compare/datasheet-home.png" alt="Datasheet, landing page, light theme." loading="lazy"><img src="compare/datasheet-home-dark.png" alt="Datasheet, landing page, dark theme." loading="lazy"><img src="compare/datasheet-datapath.png" alt="Datasheet, core datapath page, light theme." loading="lazy"><img src="compare/datasheet-datapath-dark.png" alt="Datasheet, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="datasheet/index.html">Datasheet</a></p>
+          <p class="card-by">Claude Opus 5.5</p>
+        </li>
+        <li class="card">
+          <a class="quad" href="coursebook/index.html"><img src="compare/coursebook-home.png" alt="Coursebook, landing page, light theme." loading="lazy"><img src="compare/coursebook-home-dark.png" alt="Coursebook, landing page, dark theme." loading="lazy"><img src="compare/coursebook-datapath.png" alt="Coursebook, core datapath page, light theme." loading="lazy"><img src="compare/coursebook-datapath-dark.png" alt="Coursebook, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="coursebook/index.html">Coursebook</a></p>
+          <p class="card-by">Claude Opus 5.5</p>
+        </li>
+        <li class="card">
+          <a class="quad" href="exploded/index.html"><img src="compare/exploded-home.png" alt="Exploded view, landing page, light theme." loading="lazy"><img src="compare/exploded-home-dark.png" alt="Exploded view, landing page, dark theme." loading="lazy"><img src="compare/exploded-datapath.png" alt="Exploded view, core datapath page, light theme." loading="lazy"><img src="compare/exploded-datapath-dark.png" alt="Exploded view, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="exploded/index.html">Exploded view</a></p>
+          <p class="card-by">Claude Opus 5.5</p>
+        </li>
+      </ol>
+    </li>
+    <li class="stage">
+      <p class="stage-n">Step 2</p>
+      <h3>Two unified designs, built blind</h3>
+      <p class="stage-what">Both built from your five picks without seeing each other's work, then reviewed by the other model; the fixes both agreed on were applied to both.</p>
+      <ol class="cards">
+        <li class="card">
+          <a class="quad" href="unified-claude/index.html"><img src="compare/unified-claude-home.png" alt="Unified A, landing page, light theme." loading="lazy"><img src="compare/unified-claude-home-dark.png" alt="Unified A, landing page, dark theme." loading="lazy"><img src="compare/unified-claude-datapath.png" alt="Unified A, core datapath page, light theme." loading="lazy"><img src="compare/unified-claude-datapath-dark.png" alt="Unified A, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="unified-claude/index.html">Unified A</a></p>
+          <p class="card-by">Claude Opus 5.5</p>
+        </li>
+        <li class="card">
+          <a class="quad" href="unified-sol/index.html"><img src="compare/unified-sol-home.png" alt="Unified B, landing page, light theme." loading="lazy"><img src="compare/unified-sol-home-dark.png" alt="Unified B, landing page, dark theme." loading="lazy"><img src="compare/unified-sol-datapath.png" alt="Unified B, core datapath page, light theme." loading="lazy"><img src="compare/unified-sol-datapath-dark.png" alt="Unified B, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="unified-sol/index.html">Unified B</a></p>
+          <p class="card-by">GPT-6.1 Sol</p>
+        </li>
+      </ol>
+    </li>
+    <li class="stage">
+      <p class="stage-n">Step 3</p>
+      <h3>Unified C</h3>
+      <p class="stage-what">Unified B with your corrections: one serif type system, no dots behind the layers, contents that fold below the second level.</p>
+      <ol class="cards">
+        <li class="card">
+          <a class="quad" href="unified-c/index.html"><img src="compare/unified-c-home.png" alt="Unified C, landing page, light theme." loading="lazy"><img src="compare/unified-c-home-dark.png" alt="Unified C, landing page, dark theme." loading="lazy"><img src="compare/unified-c-datapath.png" alt="Unified C, core datapath page, light theme." loading="lazy"><img src="compare/unified-c-datapath-dark.png" alt="Unified C, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="unified-c/index.html">Unified C</a></p>
+          <p class="card-by">Claude Opus 5.5, from GPT-6.1 Sol&#x27;s B</p>
+        </li>
+      </ol>
+    </li>
+    <li class="stage">
+      <p class="stage-n">Step 4</p>
+      <h3>Colour studies</h3>
+      <p class="stage-what">Unified C in seven palettes, each with a light and a dark theme.</p>
+      <ol class="cards">
+        <li class="card">
+          <a class="quad" href="unified-c/index.html"><img src="compare/palette-unified-c-home-light.png" alt="Teal-grey, landing page, light theme." loading="lazy"><img src="compare/palette-unified-c-home-dark.png" alt="Teal-grey, landing page, dark theme." loading="lazy"><img src="compare/palette-unified-c-datapath-light.png" alt="Teal-grey, core datapath page, light theme." loading="lazy"><img src="compare/palette-unified-c-datapath-dark.png" alt="Teal-grey, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="unified-c/index.html">Teal-grey</a></p>
+          <p class="card-by">GPT-6.1 Sol</p>
+        </li>
+        <li class="card">
+          <a class="quad" href="unified-c-mono/index.html"><img src="compare/palette-unified-c-mono-home-light.png" alt="Monochrome, landing page, light theme." loading="lazy"><img src="compare/palette-unified-c-mono-home-dark.png" alt="Monochrome, landing page, dark theme." loading="lazy"><img src="compare/palette-unified-c-mono-datapath-light.png" alt="Monochrome, core datapath page, light theme." loading="lazy"><img src="compare/palette-unified-c-mono-datapath-dark.png" alt="Monochrome, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="unified-c-mono/index.html">Monochrome</a></p>
+          <p class="card-by">Claude Opus 5.5</p>
+        </li>
+        <li class="card">
+          <a class="quad" href="unified-c-current/index.html"><img src="compare/palette-unified-c-current-home-light.png" alt="Current colours, landing page, light theme." loading="lazy"><img src="compare/palette-unified-c-current-home-dark.png" alt="Current colours, landing page, dark theme." loading="lazy"><img src="compare/palette-unified-c-current-datapath-light.png" alt="Current colours, core datapath page, light theme." loading="lazy"><img src="compare/palette-unified-c-current-datapath-dark.png" alt="Current colours, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="unified-c-current/index.html">Current colours</a></p>
+          <p class="card-by">Claude Opus 5.5</p>
+        </li>
+        <li class="card">
+          <a class="quad" href="unified-c-indigo/index.html"><img src="compare/palette-unified-c-indigo-home-light.png" alt="Indigo and slate, landing page, light theme." loading="lazy"><img src="compare/palette-unified-c-indigo-home-dark.png" alt="Indigo and slate, landing page, dark theme." loading="lazy"><img src="compare/palette-unified-c-indigo-datapath-light.png" alt="Indigo and slate, core datapath page, light theme." loading="lazy"><img src="compare/palette-unified-c-indigo-datapath-dark.png" alt="Indigo and slate, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="unified-c-indigo/index.html">Indigo and slate</a></p>
+          <p class="card-by">Claude Opus 5.5</p>
+        </li>
+        <li class="card">
+          <a class="quad" href="unified-c-loam/index.html"><img src="compare/palette-unified-c-loam-home-light.png" alt="Loam, landing page, light theme." loading="lazy"><img src="compare/palette-unified-c-loam-home-dark.png" alt="Loam, landing page, dark theme." loading="lazy"><img src="compare/palette-unified-c-loam-datapath-light.png" alt="Loam, core datapath page, light theme." loading="lazy"><img src="compare/palette-unified-c-loam-datapath-dark.png" alt="Loam, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="unified-c-loam/index.html">Loam</a></p>
+          <p class="card-by">Claude Fable 5.2</p>
+        </li>
+        <li class="card">
+          <a class="quad" href="unified-c-databook/index.html"><img src="compare/palette-unified-c-databook-home-light.png" alt="Databook, landing page, light theme." loading="lazy"><img src="compare/palette-unified-c-databook-home-dark.png" alt="Databook, landing page, dark theme." loading="lazy"><img src="compare/palette-unified-c-databook-datapath-light.png" alt="Databook, core datapath page, light theme." loading="lazy"><img src="compare/palette-unified-c-databook-datapath-dark.png" alt="Databook, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="unified-c-databook/index.html">Databook</a></p>
+          <p class="card-by">Claude Fable 5.2</p>
+        </li>
+        <li class="card">
+          <a class="quad" href="unified-c-claret/index.html"><img src="compare/palette-unified-c-claret-home-light.png" alt="Claret, landing page, light theme." loading="lazy"><img src="compare/palette-unified-c-claret-home-dark.png" alt="Claret, landing page, dark theme." loading="lazy"><img src="compare/palette-unified-c-claret-datapath-light.png" alt="Claret, core datapath page, light theme." loading="lazy"><img src="compare/palette-unified-c-claret-datapath-dark.png" alt="Claret, core datapath page, dark theme." loading="lazy"></a>
+          <p class="card-name"><a href="unified-c-claret/index.html">Claret</a></p>
+          <p class="card-by">Claude Fable 5.2</p>
+        </li>
+      </ol>
+    </li>
+    </ol>
+  </section>
+  <!-- /gallery:progress -->
+
+  <!-- gallery:palettes -->
+  <section id="palettes">
+    <h2>Colour studies for Unified C</h2>
+    <p class="lede">The same design in 7 palettes. Layout and type are identical; only colour tokens change. Each palette has a light and a dark theme (use the theme button in the top bar), and every one keeps four distinct layer colours, because the diagrams use them to tell the processor tile, memory fabric, peripherals and system apart.</p>
+    <ul class="jump"><li><a href="#palette-default">Teal-grey</a></li><li><a href="#palette-mono">Monochrome</a></li><li><a href="#palette-current">Current colours</a></li><li><a href="#palette-indigo">Indigo and slate</a></li><li><a href="#palette-loam">Loam</a></li><li><a href="#palette-databook">Databook</a></li><li><a href="#palette-claret">Claret</a></li></ul>
+    <article class="palette" id="palette-default">
+      <h3>Teal-grey <span class="by">GPT-6.1 Sol, as built</span></h3>
+      <p>Unified B's palette, unchanged in Unified C: warm off-white paper, graphite text and a deep petrol-blue accent.</p>
+      <div class="swatches"><div class="swatch"><span class="swatch-mode">Light</span><ul><li style="background:#FAFAF7" title="Paper #FAFAF7"><span>#FAFAF7</span></li><li style="background:#202B35" title="Text #202B35"><span>#202B35</span></li><li style="background:#205B77" title="Accent #205B77"><span>#205B77</span></li><li style="background:#205B77" title="Link #205B77"><span>#205B77</span></li><li style="background:#6848BC" title="Tile #6848BC"><span>#6848BC</span></li><li style="background:#126A80" title="Fabric #126A80"><span>#126A80</span></li><li style="background:#8B570C" title="Peripherals #8B570C"><span>#8B570C</span></li><li style="background:#B73351" title="System #B73351"><span>#B73351</span></li></ul></div><div class="swatch"><span class="swatch-mode">Dark</span><ul><li style="background:#141D25" title="Paper #141D25"><span>#141D25</span></li><li style="background:#E6EBEB" title="Text #E6EBEB"><span>#E6EBEB</span></li><li style="background:#95CDE0" title="Accent #95CDE0"><span>#95CDE0</span></li><li style="background:#95CDE0" title="Link #95CDE0"><span>#95CDE0</span></li><li style="background:#BBA8FF" title="Tile #BBA8FF"><span>#BBA8FF</span></li><li style="background:#70D4E3" title="Fabric #70D4E3"><span>#70D4E3</span></li><li style="background:#F0C071" title="Peripherals #F0C071"><span>#F0C071</span></li><li style="background:#FF9FB4" title="System #FF9FB4"><span>#FF9FB4</span></li></ul></div></div>
+      <a class="open" href="unified-c/index.html">Open Teal-grey</a>
+      <div class="palette-shots"><figure><a href="compare/palette-unified-c-home-light.png"><img src="compare/palette-unified-c-home-light.png" alt="Teal-grey palette, Landing, light theme." loading="lazy"></a><figcaption>Landing, light</figcaption></figure><figure><a href="compare/palette-unified-c-home-dark.png"><img src="compare/palette-unified-c-home-dark.png" alt="Teal-grey palette, Landing, dark theme." loading="lazy"></a><figcaption>Landing, dark</figcaption></figure><figure><a href="compare/palette-unified-c-architecture-light.png"><img src="compare/palette-unified-c-architecture-light.png" alt="Teal-grey palette, Architecture, light theme." loading="lazy"></a><figcaption>Architecture, light</figcaption></figure><figure><a href="compare/palette-unified-c-architecture-dark.png"><img src="compare/palette-unified-c-architecture-dark.png" alt="Teal-grey palette, Architecture, dark theme." loading="lazy"></a><figcaption>Architecture, dark</figcaption></figure><figure><a href="compare/palette-unified-c-address-map-light.png"><img src="compare/palette-unified-c-address-map-light.png" alt="Teal-grey palette, Address map, light theme." loading="lazy"></a><figcaption>Address map, light</figcaption></figure><figure><a href="compare/palette-unified-c-address-map-dark.png"><img src="compare/palette-unified-c-address-map-dark.png" alt="Teal-grey palette, Address map, dark theme." loading="lazy"></a><figcaption>Address map, dark</figcaption></figure><figure><a href="compare/palette-unified-c-datapath-light.png"><img src="compare/palette-unified-c-datapath-light.png" alt="Teal-grey palette, Core datapath, light theme." loading="lazy"></a><figcaption>Core datapath, light</figcaption></figure><figure><a href="compare/palette-unified-c-datapath-dark.png"><img src="compare/palette-unified-c-datapath-dark.png" alt="Teal-grey palette, Core datapath, dark theme." loading="lazy"></a><figcaption>Core datapath, dark</figcaption></figure></div>
+    </article>
+    <article class="palette" id="palette-mono">
+      <h3>Monochrome <span class="by">Claude Opus 5.5, to your brief</span></h3>
+      <p>Pure black on pure white, and pure white on pure black in the dark theme, after the Exploded view prototype. Links, rules, buttons and the current-page mark are black or white; only the four layer colours and the status colours keep a hue, because they carry meaning. Text contrast is 21:1 in both themes.</p>
+      <div class="swatches"><div class="swatch"><span class="swatch-mode">Light</span><ul><li style="background:#FFFFFF" title="Paper #FFFFFF"><span>#FFFFFF</span></li><li style="background:#000000" title="Text #000000"><span>#000000</span></li><li style="background:#000000" title="Accent #000000"><span>#000000</span></li><li style="background:#000000" title="Link #000000"><span>#000000</span></li><li style="background:#5B2FD6" title="Tile #5B2FD6"><span>#5B2FD6</span></li><li style="background:#006A80" title="Fabric #006A80"><span>#006A80</span></li><li style="background:#8A5200" title="Peripherals #8A5200"><span>#8A5200</span></li><li style="background:#C0213F" title="System #C0213F"><span>#C0213F</span></li></ul></div><div class="swatch"><span class="swatch-mode">Dark</span><ul><li style="background:#000000" title="Paper #000000"><span>#000000</span></li><li style="background:#FFFFFF" title="Text #FFFFFF"><span>#FFFFFF</span></li><li style="background:#FFFFFF" title="Accent #FFFFFF"><span>#FFFFFF</span></li><li style="background:#FFFFFF" title="Link #FFFFFF"><span>#FFFFFF</span></li><li style="background:#B9A4FF" title="Tile #B9A4FF"><span>#B9A4FF</span></li><li style="background:#4FD8EA" title="Fabric #4FD8EA"><span>#4FD8EA</span></li><li style="background:#FFC247" title="Peripherals #FFC247"><span>#FFC247</span></li><li style="background:#FF7A97" title="System #FF7A97"><span>#FF7A97</span></li></ul></div></div>
+      <a class="open" href="unified-c-mono/index.html">Open Monochrome</a>
+      <div class="palette-shots"><figure><a href="compare/palette-unified-c-mono-home-light.png"><img src="compare/palette-unified-c-mono-home-light.png" alt="Monochrome palette, Landing, light theme." loading="lazy"></a><figcaption>Landing, light</figcaption></figure><figure><a href="compare/palette-unified-c-mono-home-dark.png"><img src="compare/palette-unified-c-mono-home-dark.png" alt="Monochrome palette, Landing, dark theme." loading="lazy"></a><figcaption>Landing, dark</figcaption></figure><figure><a href="compare/palette-unified-c-mono-architecture-light.png"><img src="compare/palette-unified-c-mono-architecture-light.png" alt="Monochrome palette, Architecture, light theme." loading="lazy"></a><figcaption>Architecture, light</figcaption></figure><figure><a href="compare/palette-unified-c-mono-architecture-dark.png"><img src="compare/palette-unified-c-mono-architecture-dark.png" alt="Monochrome palette, Architecture, dark theme." loading="lazy"></a><figcaption>Architecture, dark</figcaption></figure><figure><a href="compare/palette-unified-c-mono-address-map-light.png"><img src="compare/palette-unified-c-mono-address-map-light.png" alt="Monochrome palette, Address map, light theme." loading="lazy"></a><figcaption>Address map, light</figcaption></figure><figure><a href="compare/palette-unified-c-mono-address-map-dark.png"><img src="compare/palette-unified-c-mono-address-map-dark.png" alt="Monochrome palette, Address map, dark theme." loading="lazy"></a><figcaption>Address map, dark</figcaption></figure><figure><a href="compare/palette-unified-c-mono-datapath-light.png"><img src="compare/palette-unified-c-mono-datapath-light.png" alt="Monochrome palette, Core datapath, light theme." loading="lazy"></a><figcaption>Core datapath, light</figcaption></figure><figure><a href="compare/palette-unified-c-mono-datapath-dark.png"><img src="compare/palette-unified-c-mono-datapath-dark.png" alt="Monochrome palette, Core datapath, dark theme." loading="lazy"></a><figcaption>Core datapath, dark</figcaption></figure></div>
+    </article>
+    <article class="palette" id="palette-current">
+      <h3>Current colours <span class="by">Claude Opus 5.5, to your brief</span></h3>
+      <p>The published site's colours, value for value: cool grey paper, violet links, ink for the primary button and the current-page mark, and no separate sidebar colour. The beam panel takes the page colours, as the beam does on the current landing page. One value is inherited as it is: the light theme's pink system colour is 4.34:1 on the paper, just under the 4.5:1 text target.</p>
+      <div class="swatches"><div class="swatch"><span class="swatch-mode">Light</span><ul><li style="background:#F5F6F8" title="Paper #F5F6F8"><span>#F5F6F8</span></li><li style="background:#18202C" title="Text #18202C"><span>#18202C</span></li><li style="background:#18202C" title="Accent #18202C"><span>#18202C</span></li><li style="background:#3F35C9" title="Link #3F35C9"><span>#3F35C9</span></li><li style="background:#6E46E0" title="Tile #6E46E0"><span>#6E46E0</span></li><li style="background:#0E7490" title="Fabric #0E7490"><span>#0E7490</span></li><li style="background:#A16207" title="Peripherals #A16207"><span>#A16207</span></li><li style="background:#CF3D5C" title="System #CF3D5C"><span>#CF3D5C</span></li></ul></div><div class="swatch"><span class="swatch-mode">Dark</span><ul><li style="background:#10151E" title="Paper #10151E"><span>#10151E</span></li><li style="background:#E4E9F1" title="Text #E4E9F1"><span>#E4E9F1</span></li><li style="background:#E4E9F1" title="Accent #E4E9F1"><span>#E4E9F1</span></li><li style="background:#A9A2FF" title="Link #A9A2FF"><span>#A9A2FF</span></li><li style="background:#A08BFF" title="Tile #A08BFF"><span>#A08BFF</span></li><li style="background:#3EC3D6" title="Fabric #3EC3D6"><span>#3EC3D6</span></li><li style="background:#F0B23C" title="Peripherals #F0B23C"><span>#F0B23C</span></li><li style="background:#F27590" title="System #F27590"><span>#F27590</span></li></ul></div></div>
+      <a class="open" href="unified-c-current/index.html">Open Current colours</a>
+      <div class="palette-shots"><figure><a href="compare/palette-unified-c-current-home-light.png"><img src="compare/palette-unified-c-current-home-light.png" alt="Current colours palette, Landing, light theme." loading="lazy"></a><figcaption>Landing, light</figcaption></figure><figure><a href="compare/palette-unified-c-current-home-dark.png"><img src="compare/palette-unified-c-current-home-dark.png" alt="Current colours palette, Landing, dark theme." loading="lazy"></a><figcaption>Landing, dark</figcaption></figure><figure><a href="compare/palette-unified-c-current-architecture-light.png"><img src="compare/palette-unified-c-current-architecture-light.png" alt="Current colours palette, Architecture, light theme." loading="lazy"></a><figcaption>Architecture, light</figcaption></figure><figure><a href="compare/palette-unified-c-current-architecture-dark.png"><img src="compare/palette-unified-c-current-architecture-dark.png" alt="Current colours palette, Architecture, dark theme." loading="lazy"></a><figcaption>Architecture, dark</figcaption></figure><figure><a href="compare/palette-unified-c-current-address-map-light.png"><img src="compare/palette-unified-c-current-address-map-light.png" alt="Current colours palette, Address map, light theme." loading="lazy"></a><figcaption>Address map, light</figcaption></figure><figure><a href="compare/palette-unified-c-current-address-map-dark.png"><img src="compare/palette-unified-c-current-address-map-dark.png" alt="Current colours palette, Address map, dark theme." loading="lazy"></a><figcaption>Address map, dark</figcaption></figure><figure><a href="compare/palette-unified-c-current-datapath-light.png"><img src="compare/palette-unified-c-current-datapath-light.png" alt="Current colours palette, Core datapath, light theme." loading="lazy"></a><figcaption>Core datapath, light</figcaption></figure><figure><a href="compare/palette-unified-c-current-datapath-dark.png"><img src="compare/palette-unified-c-current-datapath-dark.png" alt="Current colours palette, Core datapath, dark theme." loading="lazy"></a><figcaption>Core datapath, dark</figcaption></figure></div>
+    </article>
+    <article class="palette" id="palette-indigo">
+      <h3>Indigo and slate <span class="by">Claude Opus 5.5, to your brief</span></h3>
+      <p>Blue-grey slate for paper, rules and the sidebar, with indigo for links, focus, buttons and the current-page mark. The dark theme is a deep slate with a soft indigo accent.</p>
+      <div class="swatches"><div class="swatch"><span class="swatch-mode">Light</span><ul><li style="background:#F7F8FB" title="Paper #F7F8FB"><span>#F7F8FB</span></li><li style="background:#1C2231" title="Text #1C2231"><span>#1C2231</span></li><li style="background:#4338CA" title="Accent #4338CA"><span>#4338CA</span></li><li style="background:#3730A3" title="Link #3730A3"><span>#3730A3</span></li><li style="background:#7A3FD0" title="Tile #7A3FD0"><span>#7A3FD0</span></li><li style="background:#0D6D86" title="Fabric #0D6D86"><span>#0D6D86</span></li><li style="background:#92570A" title="Peripherals #92570A"><span>#92570A</span></li><li style="background:#C2304E" title="System #C2304E"><span>#C2304E</span></li></ul></div><div class="swatch"><span class="swatch-mode">Dark</span><ul><li style="background:#121522" title="Paper #121522"><span>#121522</span></li><li style="background:#E6E9F3" title="Text #E6E9F3"><span>#E6E9F3</span></li><li style="background:#A5B4FC" title="Accent #A5B4FC"><span>#A5B4FC</span></li><li style="background:#A5B4FC" title="Link #A5B4FC"><span>#A5B4FC</span></li><li style="background:#C3B0FF" title="Tile #C3B0FF"><span>#C3B0FF</span></li><li style="background:#5FD0E2" title="Fabric #5FD0E2"><span>#5FD0E2</span></li><li style="background:#F0B84A" title="Peripherals #F0B84A"><span>#F0B84A</span></li><li style="background:#FF8AA3" title="System #FF8AA3"><span>#FF8AA3</span></li></ul></div></div>
+      <a class="open" href="unified-c-indigo/index.html">Open Indigo and slate</a>
+      <div class="palette-shots"><figure><a href="compare/palette-unified-c-indigo-home-light.png"><img src="compare/palette-unified-c-indigo-home-light.png" alt="Indigo and slate palette, Landing, light theme." loading="lazy"></a><figcaption>Landing, light</figcaption></figure><figure><a href="compare/palette-unified-c-indigo-home-dark.png"><img src="compare/palette-unified-c-indigo-home-dark.png" alt="Indigo and slate palette, Landing, dark theme." loading="lazy"></a><figcaption>Landing, dark</figcaption></figure><figure><a href="compare/palette-unified-c-indigo-architecture-light.png"><img src="compare/palette-unified-c-indigo-architecture-light.png" alt="Indigo and slate palette, Architecture, light theme." loading="lazy"></a><figcaption>Architecture, light</figcaption></figure><figure><a href="compare/palette-unified-c-indigo-architecture-dark.png"><img src="compare/palette-unified-c-indigo-architecture-dark.png" alt="Indigo and slate palette, Architecture, dark theme." loading="lazy"></a><figcaption>Architecture, dark</figcaption></figure><figure><a href="compare/palette-unified-c-indigo-address-map-light.png"><img src="compare/palette-unified-c-indigo-address-map-light.png" alt="Indigo and slate palette, Address map, light theme." loading="lazy"></a><figcaption>Address map, light</figcaption></figure><figure><a href="compare/palette-unified-c-indigo-address-map-dark.png"><img src="compare/palette-unified-c-indigo-address-map-dark.png" alt="Indigo and slate palette, Address map, dark theme." loading="lazy"></a><figcaption>Address map, dark</figcaption></figure><figure><a href="compare/palette-unified-c-indigo-datapath-light.png"><img src="compare/palette-unified-c-indigo-datapath-light.png" alt="Indigo and slate palette, Core datapath, light theme." loading="lazy"></a><figcaption>Core datapath, light</figcaption></figure><figure><a href="compare/palette-unified-c-indigo-datapath-dark.png"><img src="compare/palette-unified-c-indigo-datapath-dark.png" alt="Indigo and slate palette, Core datapath, dark theme." loading="lazy"></a><figcaption>Core datapath, dark</figcaption></figure></div>
+    </article>
+    <article class="palette" id="palette-loam">
+      <h3>Loam <span class="by">Claude Fable 5.2, grounded</span></h3>
+      <p>Oat paper, espresso ink and a moss-green accent; the dark theme is peat brown with lichen-green links. Low colour everywhere except the four layers, for long reading sessions.</p>
+      <div class="swatches"><div class="swatch"><span class="swatch-mode">Light</span><ul><li style="background:#F5F1E8" title="Paper #F5F1E8"><span>#F5F1E8</span></li><li style="background:#29241C" title="Text #29241C"><span>#29241C</span></li><li style="background:#3C5A22" title="Accent #3C5A22"><span>#3C5A22</span></li><li style="background:#3C5A22" title="Link #3C5A22"><span>#3C5A22</span></li><li style="background:#5E3594" title="Tile #5E3594"><span>#5E3594</span></li><li style="background:#237086" title="Fabric #237086"><span>#237086</span></li><li style="background:#8D5E00" title="Peripherals #8D5E00"><span>#8D5E00</span></li><li style="background:#8E1B3D" title="System #8E1B3D"><span>#8E1B3D</span></li></ul></div><div class="swatch"><span class="swatch-mode">Dark</span><ul><li style="background:#1B1814" title="Paper #1B1814"><span>#1B1814</span></li><li style="background:#EBE5D7" title="Text #EBE5D7"><span>#EBE5D7</span></li><li style="background:#B5CE8E" title="Accent #B5CE8E"><span>#B5CE8E</span></li><li style="background:#B5CE8E" title="Link #B5CE8E"><span>#B5CE8E</span></li><li style="background:#B49CF7" title="Tile #B49CF7"><span>#B49CF7</span></li><li style="background:#7FDDDD" title="Fabric #7FDDDD"><span>#7FDDDD</span></li><li style="background:#F8CA65" title="Peripherals #F8CA65"><span>#F8CA65</span></li><li style="background:#E69184" title="System #E69184"><span>#E69184</span></li></ul></div></div>
+      <a class="open" href="unified-c-loam/index.html">Open Loam</a>
+      <div class="palette-shots"><figure><a href="compare/palette-unified-c-loam-home-light.png"><img src="compare/palette-unified-c-loam-home-light.png" alt="Loam palette, Landing, light theme." loading="lazy"></a><figcaption>Landing, light</figcaption></figure><figure><a href="compare/palette-unified-c-loam-home-dark.png"><img src="compare/palette-unified-c-loam-home-dark.png" alt="Loam palette, Landing, dark theme." loading="lazy"></a><figcaption>Landing, dark</figcaption></figure><figure><a href="compare/palette-unified-c-loam-architecture-light.png"><img src="compare/palette-unified-c-loam-architecture-light.png" alt="Loam palette, Architecture, light theme." loading="lazy"></a><figcaption>Architecture, light</figcaption></figure><figure><a href="compare/palette-unified-c-loam-architecture-dark.png"><img src="compare/palette-unified-c-loam-architecture-dark.png" alt="Loam palette, Architecture, dark theme." loading="lazy"></a><figcaption>Architecture, dark</figcaption></figure><figure><a href="compare/palette-unified-c-loam-address-map-light.png"><img src="compare/palette-unified-c-loam-address-map-light.png" alt="Loam palette, Address map, light theme." loading="lazy"></a><figcaption>Address map, light</figcaption></figure><figure><a href="compare/palette-unified-c-loam-address-map-dark.png"><img src="compare/palette-unified-c-loam-address-map-dark.png" alt="Loam palette, Address map, dark theme." loading="lazy"></a><figcaption>Address map, dark</figcaption></figure><figure><a href="compare/palette-unified-c-loam-datapath-light.png"><img src="compare/palette-unified-c-loam-datapath-light.png" alt="Loam palette, Core datapath, light theme." loading="lazy"></a><figcaption>Core datapath, light</figcaption></figure><figure><a href="compare/palette-unified-c-loam-datapath-dark.png"><img src="compare/palette-unified-c-loam-datapath-dark.png" alt="Loam palette, Core datapath, dark theme." loading="lazy"></a><figcaption>Core datapath, dark</figcaption></figure></div>
+    </article>
+    <article class="palette" id="palette-databook">
+      <h3>Databook <span class="by">Claude Fable 5.2, wild</span></h3>
+      <p>The signal yellow of a semiconductor data book printed in black, with dark red links; the dark theme inverts to black with yellow links and cream text. The peripheral layer turns dark umber on the yellow, because amber cannot be read there. In the light theme the layer plates' pale fills mostly disappear into the yellow, and the links, system layer and error colour are all dark reds.</p>
+      <div class="swatches"><div class="swatch"><span class="swatch-mode">Light</span><ul><li style="background:#FFD92E" title="Paper #FFD92E"><span>#FFD92E</span></li><li style="background:#151300" title="Text #151300"><span>#151300</span></li><li style="background:#151300" title="Accent #151300"><span>#151300</span></li><li style="background:#9A1B00" title="Link #9A1B00"><span>#9A1B00</span></li><li style="background:#7108DC" title="Tile #7108DC"><span>#7108DC</span></li><li style="background:#005E7D" title="Fabric #005E7D"><span>#005E7D</span></li><li style="background:#4B1A07" title="Peripherals #4B1A07"><span>#4B1A07</span></li><li style="background:#A92227" title="System #A92227"><span>#A92227</span></li></ul></div><div class="swatch"><span class="swatch-mode">Dark</span><ul><li style="background:#0E0D0A" title="Paper #0E0D0A"><span>#0E0D0A</span></li><li style="background:#FBF3CF" title="Text #FBF3CF"><span>#FBF3CF</span></li><li style="background:#FFD92E" title="Accent #FFD92E"><span>#FFD92E</span></li><li style="background:#FFD92E" title="Link #FFD92E"><span>#FFD92E</span></li><li style="background:#9F9AFC" title="Tile #9F9AFC"><span>#9F9AFC</span></li><li style="background:#71E3FE" title="Fabric #71E3FE"><span>#71E3FE</span></li><li style="background:#FEB263" title="Peripherals #FEB263"><span>#FEB263</span></li><li style="background:#FD7EAA" title="System #FD7EAA"><span>#FD7EAA</span></li></ul></div></div>
+      <a class="open" href="unified-c-databook/index.html">Open Databook</a>
+      <div class="palette-shots"><figure><a href="compare/palette-unified-c-databook-home-light.png"><img src="compare/palette-unified-c-databook-home-light.png" alt="Databook palette, Landing, light theme." loading="lazy"></a><figcaption>Landing, light</figcaption></figure><figure><a href="compare/palette-unified-c-databook-home-dark.png"><img src="compare/palette-unified-c-databook-home-dark.png" alt="Databook palette, Landing, dark theme." loading="lazy"></a><figcaption>Landing, dark</figcaption></figure><figure><a href="compare/palette-unified-c-databook-architecture-light.png"><img src="compare/palette-unified-c-databook-architecture-light.png" alt="Databook palette, Architecture, light theme." loading="lazy"></a><figcaption>Architecture, light</figcaption></figure><figure><a href="compare/palette-unified-c-databook-architecture-dark.png"><img src="compare/palette-unified-c-databook-architecture-dark.png" alt="Databook palette, Architecture, dark theme." loading="lazy"></a><figcaption>Architecture, dark</figcaption></figure><figure><a href="compare/palette-unified-c-databook-address-map-light.png"><img src="compare/palette-unified-c-databook-address-map-light.png" alt="Databook palette, Address map, light theme." loading="lazy"></a><figcaption>Address map, light</figcaption></figure><figure><a href="compare/palette-unified-c-databook-address-map-dark.png"><img src="compare/palette-unified-c-databook-address-map-dark.png" alt="Databook palette, Address map, dark theme." loading="lazy"></a><figcaption>Address map, dark</figcaption></figure><figure><a href="compare/palette-unified-c-databook-datapath-light.png"><img src="compare/palette-unified-c-databook-datapath-light.png" alt="Databook palette, Core datapath, light theme." loading="lazy"></a><figcaption>Core datapath, light</figcaption></figure><figure><a href="compare/palette-unified-c-databook-datapath-dark.png"><img src="compare/palette-unified-c-databook-datapath-dark.png" alt="Databook palette, Core datapath, dark theme." loading="lazy"></a><figcaption>Core datapath, dark</figcaption></figure></div>
+    </article>
+    <article class="palette" id="palette-claret">
+      <h3>Claret <span class="by">Claude Fable 5.2, editorial</span></h3>
+      <p>Salmon newsprint paper, wine-black ink and a claret accent; the dark theme is a cellar red with blush-pink links. The system layer is close to the link colour.</p>
+      <div class="swatches"><div class="swatch"><span class="swatch-mode">Light</span><ul><li style="background:#FCEBE0" title="Paper #FCEBE0"><span>#FCEBE0</span></li><li style="background:#2A1A1D" title="Text #2A1A1D"><span>#2A1A1D</span></li><li style="background:#8A1A3F" title="Accent #8A1A3F"><span>#8A1A3F</span></li><li style="background:#8A1A3F" title="Link #8A1A3F"><span>#8A1A3F</span></li><li style="background:#3A2FA8" title="Tile #3A2FA8"><span>#3A2FA8</span></li><li style="background:#1E6E86" title="Fabric #1E6E86"><span>#1E6E86</span></li><li style="background:#8A5A08" title="Peripherals #8A5A08"><span>#8A5A08</span></li><li style="background:#8E1244" title="System #8E1244"><span>#8E1244</span></li></ul></div><div class="swatch"><span class="swatch-mode">Dark</span><ul><li style="background:#1D1316" title="Paper #1D1316"><span>#1D1316</span></li><li style="background:#F3E7E1" title="Text #F3E7E1"><span>#F3E7E1</span></li><li style="background:#F4A9B8" title="Accent #F4A9B8"><span>#F4A9B8</span></li><li style="background:#F4A9B8" title="Link #F4A9B8"><span>#F4A9B8</span></li><li style="background:#98A4FA" title="Tile #98A4FA"><span>#98A4FA</span></li><li style="background:#58D8E6" title="Fabric #58D8E6"><span>#58D8E6</span></li><li style="background:#EBC868" title="Peripherals #EBC868"><span>#EBC868</span></li><li style="background:#F08A9C" title="System #F08A9C"><span>#F08A9C</span></li></ul></div></div>
+      <a class="open" href="unified-c-claret/index.html">Open Claret</a>
+      <div class="palette-shots"><figure><a href="compare/palette-unified-c-claret-home-light.png"><img src="compare/palette-unified-c-claret-home-light.png" alt="Claret palette, Landing, light theme." loading="lazy"></a><figcaption>Landing, light</figcaption></figure><figure><a href="compare/palette-unified-c-claret-home-dark.png"><img src="compare/palette-unified-c-claret-home-dark.png" alt="Claret palette, Landing, dark theme." loading="lazy"></a><figcaption>Landing, dark</figcaption></figure><figure><a href="compare/palette-unified-c-claret-architecture-light.png"><img src="compare/palette-unified-c-claret-architecture-light.png" alt="Claret palette, Architecture, light theme." loading="lazy"></a><figcaption>Architecture, light</figcaption></figure><figure><a href="compare/palette-unified-c-claret-architecture-dark.png"><img src="compare/palette-unified-c-claret-architecture-dark.png" alt="Claret palette, Architecture, dark theme." loading="lazy"></a><figcaption>Architecture, dark</figcaption></figure><figure><a href="compare/palette-unified-c-claret-address-map-light.png"><img src="compare/palette-unified-c-claret-address-map-light.png" alt="Claret palette, Address map, light theme." loading="lazy"></a><figcaption>Address map, light</figcaption></figure><figure><a href="compare/palette-unified-c-claret-address-map-dark.png"><img src="compare/palette-unified-c-claret-address-map-dark.png" alt="Claret palette, Address map, dark theme." loading="lazy"></a><figcaption>Address map, dark</figcaption></figure><figure><a href="compare/palette-unified-c-claret-datapath-light.png"><img src="compare/palette-unified-c-claret-datapath-light.png" alt="Claret palette, Core datapath, light theme." loading="lazy"></a><figcaption>Core datapath, light</figcaption></figure><figure><a href="compare/palette-unified-c-claret-datapath-dark.png"><img src="compare/palette-unified-c-claret-datapath-dark.png" alt="Claret palette, Core datapath, dark theme." loading="lazy"></a><figcaption>Core datapath, dark</figcaption></figure></div>
+    </article>
+  </section>
+  <!-- /gallery:palettes -->
+
+  <section id="unified-c">
+    <h2>Unified C (revised from B)</h2>
+    <p class="lede">Unified B with your four corrections: one serif type system, no dots or guide lines behind the layers, and folding contents below the second level. Its colours are studied separately, <a href="#palettes">above</a>.</p>
+    <a class="open" href="unified-c/index.html">Open Unified C</a>
+    <div class="shots">
+      <figure class="half"><img src="compare/unified-c-home.png" alt="Unified C landing page: serif headline and navigation, four stacked layers on plain paper with no dot grid or guide lines." loading="lazy"><figcaption>Landing: serif throughout, the layers on plain paper</figcaption></figure>
+      <figure class="half"><img src="compare/unified-c-home-dark.png" alt="Unified C landing page in the dark theme." loading="lazy"><figcaption>Landing, dark theme</figcaption></figure>
+      <figure><img src="compare/unified-c-datapath.png" alt="Unified C core datapath page: serif navigation and tabs, sans simulator controls, Core datapath open in the contents." loading="lazy"><figcaption>Simulator in the data face; Core datapath open in the contents</figcaption></figure>
+      <figure><img src="compare/unified-c-guide.png" alt="Unified C guide page set in serif, with monospace code." loading="lazy"><figcaption>Guide: serif prose and headings, monospace code</figcaption></figure>
+      <figure><img src="compare/unified-c-tables.png" alt="Unified C manifest keys guide: serif prose around a sans table of keys." loading="lazy"><figcaption>Tables in the data face</figcaption></figure>
+      <figure><img src="compare/unified-c-address-map.png" alt="Unified C address map at the uart region with a sans register table." loading="lazy"><figcaption>Registers in the data face</figcaption></figure>
+      <figure><img src="compare/unified-c-architecture.png" alt="Unified C architecture overview with serif beam labels." loading="lazy"><figcaption>Architecture: the beam</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-c-phone-home.png" alt="Unified C landing on a phone." loading="lazy"><figcaption>Phone</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-c-phone-nav.png" alt="Unified C contents drawer on a phone." loading="lazy"><figcaption>Contents drawer</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-c-phone-guide.png" alt="Unified C guide on a phone." loading="lazy"><figcaption>Guide</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-c-phone-datapath.png" alt="Unified C datapath on a phone." loading="lazy"><figcaption>Datapath</figcaption></figure>
+      <figure><img src="compare/unified-c-dark.png" alt="Unified C in the dark theme." loading="lazy"><figcaption>Dark theme</figcaption></figure>
+    </div>
+    <dl class="facts">
+      <div><dt>Text: Charis SIL</dt><dd>Headings, prose, the contents, breadcrumbs, tabs, buttons, captions, figure labels and search.</dd></div>
+      <div><dt>Data: Atkinson Hyperlegible Next</dt><dd>Tables, the address map and register details, the simulators and diagrams, tool forms and status labels: dense material where 1, l and I or 0 and O must stay apart.</dd></div>
+      <div><dt>Code: Atkinson Hyperlegible Mono</dt><dd>Code, addresses, register and field names, and interface names such as <code>mmio_if</code>.</dd></div>
+      <div><dt>Contents</dt><dd>The first two levels stay open. Below that, a page with pages of its own, such as Core datapath, folds behind a toggle at the end of its row and opens when you are on it or inside it.</dd></div>
+    </dl>
+  </section>
+
+  <section id="brief">
+    <h2>What the unified designs keep</h2>
+    <p>Both unified designs were built from the same five choices:</p>
+    <ol>
+      <li>The Datasheet sidebar; Datasheet's address-space figure moves to the address map page.</li>
+      <li>The Exploded view landing animation.</li>
+      <li>Coursebook's typography, its search in the sidebar and its previous and next progression, without any record of what has been read.</li>
+      <li>The current site's beam through the prism, moved off the landing page.</li>
+      <li>Breadcrumbs and implementation-status labels.</li>
+    </ol>
+    <p>Both place the beam on the Architecture overview, where it now does a job: each ray is a button that shows its layer or contract in the interactive block diagram on the same page. An About page was considered and set aside, because the site has no About content for it to hold yet.</p>
+  </section>
+
+  <section id="unified-claude">
+    <h2>Unified A (Claude)</h2>
+    <p class="lede">A reference manual with a reading order. A graphite title bar and contents tree, a white sheet, and the four contract colours as the only colour. The landing animation sits on a dark band.</p>
+    <a class="open" href="unified-claude/index.html">Open Unified A</a>
+    <div class="shots">
+      <figure class="half"><img src="compare/unified-claude-home.png" alt="Unified A landing page: serif headline on a dark band beside four stacked layers in the contract colours, with the contents tree on the left." loading="lazy"><figcaption>Landing: the exploded layers on a dark band</figcaption></figure>
+      <figure class="half"><img src="compare/unified-claude-home-dark.png" alt="Unified A landing page in the dark theme." loading="lazy"><figcaption>Landing, dark theme</figcaption></figure>
+      <figure><img src="compare/unified-claude-architecture.png" alt="Unified A architecture overview: the opening paragraph beside the beam through the prism, with layer and contract labels." loading="lazy"><figcaption>Architecture: the beam beside the opening paragraph</figcaption></figure>
+      <figure><img src="compare/unified-claude-address-space.png" alt="Unified A address map with the address-space figure open under the introduction." loading="lazy"><figcaption>Address map: the address-space overview, open</figcaption></figure>
+      <figure><img src="compare/unified-claude-address-map.png" alt="Unified A address map at the uart region, with its register table expanded." loading="lazy"><figcaption>A region link: overview folded, registers first</figcaption></figure>
+      <figure><img src="compare/unified-claude-coherent.png" alt="Unified A coherent bus page with an In development badge after the breadcrumb." loading="lazy"><figcaption>Status in the breadcrumb and the tree</figcaption></figure>
+      <figure><img src="compare/unified-claude-guide.png" alt="Unified A guide page with a serif reading column and an outline rail." loading="lazy"><figcaption>Guide</figcaption></figure>
+      <figure><img src="compare/unified-claude-datapath.png" alt="Unified A core datapath simulator." loading="lazy"><figcaption>Core datapath simulator</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-claude-phone-home.png" alt="Unified A landing on a phone." loading="lazy"><figcaption>Phone</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-claude-phone-guide.png" alt="Unified A guide on a phone, with previous, contents and next in a bar at the bottom." loading="lazy"><figcaption>Guide, with the reading bar</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-claude-phone-search.png" alt="Unified A contents drawer on a phone with search results for uart." loading="lazy"><figcaption>Search in the drawer</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-claude-phone-datapath.png" alt="Unified A datapath on a phone." loading="lazy"><figcaption>Datapath</figcaption></figure>
+      <figure><img src="compare/unified-claude-dark.png" alt="Unified A in the dark theme." loading="lazy"><figcaption>Dark theme</figcaption></figure>
+    </div>
+    <dl class="facts">
+      <div><dt>Layout</dt><dd>Title bar with the breadcrumbs, contents tree with search pinned at its head, the page, and an outline rail on wide screens.</dd></div>
+      <div><dt>Navigation</dt><dd>The tree is in reading order: Start, Tutorials, Architecture, Guides, Reference, Tools, Project. Previous and next follow it exactly. On a phone, a bar at the bottom holds previous, the contents and next, with each destination's name.</dd></div>
+      <div><dt>Type</dt><dd>Charis SIL for headings and prose; Atkinson Hyperlegible Next for navigation, tables and labels; Atkinson Hyperlegible Mono for addresses and code.</dd></div>
+      <div><dt>Technical content</dt><dd>The address-space figure is a fold on the address map, open on the overview and closed when a link names a region; the region in view is marked. Status labels appear in the tree and after the breadcrumb.</dd></div>
+    </dl>
+    <div class="verdict">
+      <div><h3>Strengths</h3><ul>
+        <li>The landing animation keeps the presence it had in Exploded view.</li>
+        <li>One order everywhere: what the tree lists next is what Next opens.</li>
+        <li>The phone reading bar keeps previous and next in reach and names both.</li>
+        <li>Highest body-text contrast of the two, 17.7 : 1.</li>
+      </ul></div>
+      <div><h3>Weaknesses</h3><ul>
+        <li>The reading-order tree puts Reference fifth. A returning engineer reaches it by search or by scrolling the tree.</li>
+        <li>The dark band and the dark title bar are a stronger contrast with the white pages than Unified B's single surface.</li>
+        <li>The phone reading bar takes a strip at the bottom of the screen.</li>
+        <li>The landing headline runs to five lines at 1440 pixels.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="unified-sol">
+    <h2>Unified B (GPT-6.1 Sol)</h2>
+    <p class="lede">An engineering manual with interactive figures, on one quiet surface. Warm white paper, slate ink and a restrained blue for links. The landing animation sits on the page itself; the beam on Architecture is set in a dark panel.</p>
+    <a class="open" href="unified-sol/index.html">Open Unified B</a>
+    <div class="shots">
+      <figure class="half"><img src="compare/unified-sol-home.png" alt="Unified B landing page: serif headline beside four stacked layers drawn on a dotted grid on warm white paper." loading="lazy"><figcaption>Landing: the exploded layers on the page surface</figcaption></figure>
+      <figure class="half"><img src="compare/unified-sol-home-dark.png" alt="Unified B landing page in the dark theme." loading="lazy"><figcaption>Landing, dark theme</figcaption></figure>
+      <figure><img src="compare/unified-sol-architecture.png" alt="Unified B architecture overview: the opening paragraph beside the beam in a dark panel." loading="lazy"><figcaption>Architecture: the beam in a dark panel</figcaption></figure>
+      <figure><img src="compare/unified-sol-address-space.png" alt="Unified B address map with an Address space overview fold open." loading="lazy"><figcaption>Address map: the address-space overview, open</figcaption></figure>
+      <figure><img src="compare/unified-sol-address-map.png" alt="Unified B address map at the uart region." loading="lazy"><figcaption>A region link: overview folded, registers first</figcaption></figure>
+      <figure><img src="compare/unified-sol-coherent.png" alt="Unified B coherent bus page with an In development badge after the breadcrumb." loading="lazy"><figcaption>Status in the breadcrumb and the tree</figcaption></figure>
+      <figure><img src="compare/unified-sol-guide.png" alt="Unified B guide page with a serif reading column and an outline rail." loading="lazy"><figcaption>Guide</figcaption></figure>
+      <figure><img src="compare/unified-sol-datapath.png" alt="Unified B core datapath simulator." loading="lazy"><figcaption>Core datapath simulator</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-sol-phone-home.png" alt="Unified B landing on a phone." loading="lazy"><figcaption>Phone</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-sol-phone-guide.png" alt="Unified B guide on a phone." loading="lazy"><figcaption>Guide</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-sol-phone-search.png" alt="Unified B contents drawer on a phone with search results for uart." loading="lazy"><figcaption>Search in the drawer</figcaption></figure>
+      <figure class="phone"><img src="compare/unified-sol-phone-datapath.png" alt="Unified B datapath on a phone." loading="lazy"><figcaption>Datapath</figcaption></figure>
+      <figure><img src="compare/unified-sol-dark.png" alt="Unified B in the dark theme." loading="lazy"><figcaption>Dark theme</figcaption></figure>
+    </div>
+    <dl class="facts">
+      <div><dt>Layout</dt><dd>Title bar with the breadcrumbs, contents tree with search at its head, the page, an outline rail on wide screens, and a footer.</dd></div>
+      <div><dt>Navigation</dt><dd>The tree keeps Datasheet's order, with Reference second: Start, Reference, Architecture, Tutorials, Guides, Tools, Project. Previous and next follow it. On a phone, previous and next sit at the foot of the page, and the page outline is a fold.</dd></div>
+      <div><dt>Type</dt><dd>The same three faces as Unified A: Charis SIL, Atkinson Hyperlegible Next and Atkinson Hyperlegible Mono.</dd></div>
+      <div><dt>Technical content</dt><dd>The same address-space fold, open on the overview and closed on region links. Reader routes are titled “Find your starting point”. The audience names are students, researchers and industry partners.</dd></div>
+    </dl>
+    <div class="verdict">
+      <div><h3>Strengths</h3><ul>
+        <li>The calmest of all the designs: one surface from the landing page to the reference.</li>
+        <li>Reference sits second in the tree, closest to the top for a returning engineer.</li>
+        <li>The landing page brings the reader routes nearest the first screen.</li>
+        <li>No fixed bar on a phone, so the whole screen is page.</li>
+      </ul></div>
+      <div><h3>Weaknesses</h3><ul>
+        <li>On paper, the landing animation is quieter than the Exploded view original you preferred.</li>
+        <li>The reading order puts Reference before Tutorials, so Next from Overview leads into the address map rather than into the first steps.</li>
+        <li>On a phone, previous and next are only at the foot of a long page.</li>
+        <li>The beam's labels are set small inside the drawing.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="process">
+    <h2>How the two were made</h2>
+    <p>Claude built Unified A and GPT-6.1 Sol built Unified B, from the same brief and in separate worktrees, without seeing each other's work. Each then reviewed the other's design with screenshots and the source, and each accepted or rejected every point.</p>
+    <h3>Changes made to Unified A after Sol's review</h3>
+    <ul>
+      <li>Keyboard focus stays inside the phone drawer while a search is open. Before the fix, Tab could escape into the page behind it.</li>
+      <li>The address-space figure became a fold: open on the overview, closed on region links.</li>
+      <li>Search stays pinned at the head of the tree, and the tree scrolls to show the current page.</li>
+      <li>The phone reading bar names the previous and next pages.</li>
+      <li>The landing headline and the layers sit side by side from about 1440 pixels. On a phone, each layer's labels stay beside its plate.</li>
+      <li>Adopted from Unified B: the beam beside the Architecture opening paragraph, “Industry partners” as the audience name, and a page title on locally generated peripheral documents.</li>
+    </ul>
+    <h3>Changes made to Unified B after Claude's review</h3>
+    <ul>
+      <li>The canonical landing headline, introduction and figure title are restored. The first version had rewritten the headline and added a “RISC-V · simulation · FPGA” label above it.</li>
+      <li>The tree and previous and next now follow one order.</li>
+      <li>The beam is drawn directly. The first version briefly rendered the landing page behind the scenes to copy it.</li>
+      <li>Breadcrumbs show implementation status, and they moved into the title bar.</li>
+      <li>Reader routes show every step, not only the first three.</li>
+      <li>The address-space figure marks the region in view.</li>
+      <li>Adopted from Unified A: the beam's layer and contract buttons, which show each part in the block diagram.</li>
+    </ul>
+    <h3>Where the two still differ</h3>
+    <ul>
+      <li><strong>Tree order.</strong> Unified A orders the tree for reading: Tutorials and Architecture before Reference. Unified B keeps Datasheet's order, with Reference second, for returning engineers. Each design's previous and next follow its own tree.</li>
+      <li><strong>Landing surface.</strong> Unified A keeps Exploded view's dark band. Unified B keeps the layers on the page surface, so the landing page reads as part of the documentation.</li>
+      <li><strong>Phone reading controls.</strong> Unified A has a fixed bar with previous, contents and next. Unified B keeps them at the foot of the page.</li>
+    </ul>
+  </section>
 
   <section id="datasheet">
     <h2>Datasheet</h2>
     <p class="lede">Prism as a reference manual. A navy title band, a full contents tree, ruled tables and a memory-map figure, in the manner of a semiconductor reference manual.</p>
     <a class="open" href="datasheet/index.html">Open Datasheet</a>
     <div class="shots">
-      <figure class="wide"><img src="compare/datasheet-home.png" alt="Datasheet landing page: headline beside a figure of the address space, then task lists." loading="lazy"><figcaption>Landing: the address space as the opening figure</figcaption></figure>
+      <figure class="half"><img src="compare/datasheet-home.png" alt="Datasheet landing page: headline beside a figure of the address space, then task lists." loading="lazy"><figcaption>Landing: the address space as the opening figure</figcaption></figure>
+      <figure class="half"><img src="compare/datasheet-home-dark.png" alt="Datasheet landing page in the dark theme." loading="lazy"><figcaption>Landing, dark theme</figcaption></figure>
       <figure><img src="compare/datasheet-address-map.png" alt="Datasheet address map with a ruled register table and an outline rail." loading="lazy"><figcaption>Address map with the outline and address-space rail</figcaption></figure>
       <figure><img src="compare/datasheet-guide.png" alt="Datasheet guide page with sections opened by full-width rules." loading="lazy"><figcaption>Guide</figcaption></figure>
       <figure><img src="compare/datasheet-datapath.png" alt="Datasheet core datapath page with segmented layer tabs." loading="lazy"><figcaption>Core datapath simulator</figcaption></figure>
@@ -101,7 +458,8 @@
     <a class="open" href="coursebook/index.html">Open Coursebook</a>
     <div class="shots">
       <figure class="wide"><img src="compare/coursebook-guide.png" alt="Coursebook guide page: serif reading column, course outline with the current page highlighted, and a margin outline." loading="lazy"><figcaption>Guide: outline, reading column and margin</figcaption></figure>
-      <figure><img src="compare/coursebook-home.png" alt="Coursebook landing page with the prism illustration on grid paper." loading="lazy"><figcaption>Landing, followed by three reading routes</figcaption></figure>
+      <figure class="half"><img src="compare/coursebook-home.png" alt="Coursebook landing page with the prism illustration on grid paper." loading="lazy"><figcaption>Landing, followed by three reading routes</figcaption></figure>
+      <figure class="half"><img src="compare/coursebook-home-dark.png" alt="Coursebook landing page in the dark theme." loading="lazy"><figcaption>Landing, dark theme</figcaption></figure>
       <figure><img src="compare/coursebook-tutorial.png" alt="Coursebook tutorial with stages that can be ticked off." loading="lazy"><figcaption>Tutorial as a checklist</figcaption></figure>
       <figure><img src="compare/coursebook-address-map.png" alt="Coursebook address map." loading="lazy"><figcaption>Address map</figcaption></figure>
       <figure><img src="compare/coursebook-datapath.png" alt="Coursebook core datapath page." loading="lazy"><figcaption>Core datapath simulator</figcaption></figure>
@@ -138,7 +496,8 @@
     <p class="lede">Prism as a platform site. Black type on white with the four contract colours as the only colour, sections in a top bar, and a landing page that opens on the SoC drawn apart into its layers.</p>
     <a class="open" href="exploded/index.html">Open Exploded view</a>
     <div class="shots">
-      <figure class="wide"><img src="compare/exploded-home.png" alt="Exploded view landing page: white headline on black beside four stacked layers in the contract colours." loading="lazy"><figcaption>Landing: system, peripherals, memory fabric and processor tile, each linked to its pages</figcaption></figure>
+      <figure class="half"><img src="compare/exploded-home.png" alt="Exploded view landing page: white headline on black beside four stacked layers in the contract colours." loading="lazy"><figcaption>Landing: system, peripherals, memory fabric and processor tile, each linked to its pages</figcaption></figure>
+      <figure class="half"><img src="compare/exploded-home-dark.png" alt="Exploded view landing page in the dark theme." loading="lazy"><figcaption>Landing, dark theme</figcaption></figure>
       <figure><img src="compare/exploded-datapath.png" alt="Exploded view core datapath page using the full width." loading="lazy"><figcaption>Core datapath simulator at full width</figcaption></figure>
       <figure><img src="compare/exploded-guide.png" alt="Exploded view guide page with a centred reading column." loading="lazy"><figcaption>Guide</figcaption></figure>
       <figure><img src="compare/exploded-address-map.png" alt="Exploded view address map." loading="lazy"><figcaption>Address map</figcaption></figure>
@@ -173,32 +532,32 @@
 
   <section id="evaluation">
     <h2>Evaluation</h2>
-    <p>Measured in headless Chrome on the built sites: 27 representative pages at five screen sizes from 320 to 1440 pixels, both themes, and the interactive tools. The same checks ran on the current site.</p>
+    <p>Measured in headless Chrome on the built sites: 27 representative pages at five screen sizes from 320 to 1440 pixels, both themes, and the interactive tools. The same checks ran on every design and on the current site.</p>
     <div class="scroll"><table>
-      <thead><tr><th scope="col">Check</th><th scope="col">Datasheet</th><th scope="col">Coursebook</th><th scope="col">Exploded view</th><th scope="col">Current</th></tr></thead>
+      <thead><tr><th scope="col">Check</th><th scope="col">Unified A</th><th scope="col">Unified B</th><th scope="col">Datasheet</th><th scope="col">Coursebook</th><th scope="col">Exploded view</th><th scope="col">Current</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Script errors, 135 page loads</th><td>None</td><td>None</td><td>None</td><td>None</td></tr>
-        <tr><th scope="row">Sideways scrolling, 320 to 1440</th><td>None</td><td>None</td><td>None</td><td>None</td></tr>
-        <tr><th scope="row">Simulators and tools</th><td colspan="4">Identical results in all four: the Base core runs an assembled program to its halt, the cycle slider seeks, both cache explorers and the bus view mount, the address map resolves <code>0x40020008</code> to <code>uart.status</code>.</td></tr>
-        <tr><th scope="row">Controls without a name; fields without a label</th><td>None</td><td>None</td><td>None</td><td>None</td></tr>
-        <tr><th scope="row">Shell touch targets under 40px</th><td>None</td><td>None</td><td>None</td><td>Brand link</td></tr>
-        <tr><th scope="row">Body text on page, contrast</th><td>17.3 : 1</td><td>14.5 : 1</td><td>21 : 1</td><td>15.2 : 1</td></tr>
-        <tr><th scope="row">Lowest text contrast, either theme</th><td>4.7 : 1</td><td>5.0 : 1</td><td>5.0 : 1</td><td>4.3 : 1</td></tr>
-        <tr><th scope="row">Guide prose, desktop</th><td>15px, about 80 characters a line</td><td>18px, about 75</td><td>17px, about 78</td><td>16px, about 88</td></tr>
-        <tr><th scope="row">Width for a simulator at 1440</th><td>1121px</td><td>1072px</td><td>1344px</td><td>1064px</td></tr>
-        <tr><th scope="row">Clicks from a guide to another guide</th><td>1, or 2 across groups</td><td>1, or 2 across units</td><td>2</td><td>2</td></tr>
-        <tr><th scope="row">Find a register or address from any page</th><td>Yes</td><td>Yes</td><td>Yes</td><td>On the address map only</td></tr>
-        <tr><th scope="row">Keyboard</th><td colspan="3">Skip link first; <kbd>/</kbd> or Ctrl K opens search; arrows and Enter choose; Escape closes panels and returns focus.</td><td>Skip link first</td></tr>
+        <tr><th scope="row">Script errors, 135 page loads</th><td>None</td><td>None</td><td>None</td><td>None</td><td>None</td><td>None</td></tr>
+        <tr><th scope="row">Sideways scrolling, 320 to 1440</th><td>None</td><td>None</td><td>None</td><td>None</td><td>None</td><td>None</td></tr>
+        <tr><th scope="row">Simulators and tools</th><td colspan="6">Identical results in all six: the Base core runs an assembled program to its halt, the cycle slider seeks, both cache explorers and the bus view mount, the address map resolves <code>0x40020008</code> to <code>uart.status</code>.</td></tr>
+        <tr><th scope="row">Controls without a name; fields without a label</th><td>None</td><td>None</td><td>None</td><td>None</td><td>None</td><td>None</td></tr>
+        <tr><th scope="row">Shell touch targets under 40px</th><td>None</td><td>None</td><td>None</td><td>None</td><td>None</td><td>Brand link</td></tr>
+        <tr><th scope="row">Body text on page, contrast</th><td>17.7 : 1</td><td>13.8 : 1</td><td>17.3 : 1</td><td>14.5 : 1</td><td>21 : 1</td><td>15.2 : 1</td></tr>
+        <tr><th scope="row">Lowest text contrast, either theme</th><td>5.5 : 1</td><td>5.4 : 1</td><td>4.7 : 1</td><td>5.0 : 1</td><td>5.0 : 1</td><td>4.3 : 1</td></tr>
+        <tr><th scope="row">Guide prose, desktop</th><td>18px, about 75</td><td>18px, about 78</td><td>15px, about 80 characters a line</td><td>18px, about 75</td><td>17px, about 78</td><td>16px, about 88</td></tr>
+        <tr><th scope="row">Width for a simulator at 1440</th><td>1102px</td><td>1076px</td><td>1121px</td><td>1072px</td><td>1344px</td><td>1064px</td></tr>
+        <tr><th scope="row">Clicks from a guide to another guide</th><td>1, or 2 across groups</td><td>1, or 2 across groups</td><td>1, or 2 across groups</td><td>1, or 2 across units</td><td>2</td><td>2</td></tr>
+        <tr><th scope="row">Find a register or address from any page</th><td>Yes, from the sidebar</td><td>Yes, from the sidebar</td><td>Yes</td><td>Yes</td><td>Yes</td><td>On the address map only</td></tr>
+        <tr><th scope="row">Keyboard</th><td colspan="5">Skip link first; <kbd>/</kbd> or Ctrl K opens search; arrows and Enter choose; Escape closes panels and returns focus.</td><td>Skip link first</td></tr>
       </tbody>
     </table></div>
 
     <h3>Fit by reader</h3>
     <div class="scroll"><table>
-      <thead><tr><th scope="col">Reader</th><th scope="col">Datasheet</th><th scope="col">Coursebook</th><th scope="col">Exploded view</th></tr></thead>
+      <thead><tr><th scope="col">Reader</th><th scope="col">Unified A</th><th scope="col">Unified B</th><th scope="col">Datasheet</th><th scope="col">Coursebook</th><th scope="col">Exploded view</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Students</th><td>Adequate. Everything is findable, little is sequenced.</td><td>Best. Ordered reading, saved progress, checklists.</td><td>Good. Routes on the landing page; no sequence after that.</td></tr>
-        <tr><th scope="row">Researchers</th><td>Best. Lookup, manifest keys and interfaces are a query away.</td><td>Good for a first pass; slower on return visits.</td><td>Good. Panels expose the configuration and experiment guides early.</td></tr>
-        <tr><th scope="row">Engineering teams</th><td>Best for daily reference once adopted.</td><td>Adequate. The tone is instructional.</td><td>Best for evaluation: what it is, what ships, where to start.</td></tr>
+        <tr><th scope="row">Students</th><td>Best of the two. The tree is a course order, and the phone bar keeps the next page in reach.</td><td>Good. The routes are complete; the tree opens on reference before tutorials.</td><td>Adequate. Everything is findable, little is sequenced.</td><td>Best. Ordered reading, saved progress, checklists.</td><td>Good. Routes on the landing page; no sequence after that.</td></tr>
+        <tr><th scope="row">Researchers</th><td>Good. Search reaches every register and guide section; reference is lower in the tree.</td><td>Best of the two. Reference near the top; the same search.</td><td>Best. Lookup, manifest keys and interfaces are a query away.</td><td>Good for a first pass; slower on return visits.</td><td>Good. Panels expose the configuration and experiment guides early.</td></tr>
+        <tr><th scope="row">Industry partners</th><td>Best first impression: the dark band and the layers carry Exploded view's presentation.</td><td>Quieter and more uniform; reads as documentation from the first screen.</td><td>Best for daily reference once adopted.</td><td>Adequate. The tone is instructional.</td><td>Best for evaluation: what it is, what ships, where to start.</td></tr>
       </tbody>
     </table></div>
     <p class="note">Not measured here: screen-reader passes with a real reader, colour-vision simulation, and reading tests with students. The checks above are structural; they do not replace those.</p>
@@ -206,6 +565,8 @@
 
   <section id="recommendation">
     <h2>Recommendation</h2>
+    <p>Both unified designs meet the five choices and pass the same checks; they now differ in three judgement calls, listed under <a href="#process">How the two were made</a>. Choose by those: reading order and a stronger landing page favour <strong>Unified A</strong>; reference first and one quiet surface favour <strong>Unified B</strong>. Either can take the other's position on any of the three, since both run on the same shared runtime.</p>
+    <p>The recommendation made for the first three directions, before the unified designs, follows for reference.</p>
     <p>Use <strong>Exploded view</strong> as the shell, and carry two things over from the others. Its full-width pages suit the simulators, which are the site's most distinctive content, and its landing page serves a first-time evaluator best.</p>
     <ul>
       <li>From Coursebook: previous and next on guides and tutorials, and the tutorial checklist. They cover Exploded view's weakest point, moving between guides, and they are what students gain most from.</li>

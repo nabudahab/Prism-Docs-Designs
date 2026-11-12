@@ -1,0 +1,104 @@
+{
+  "schema": "prism-tutorial-v2",
+  "key": "hazard3",
+  "title": "Use Hazard3",
+  "nav_title": "Use Hazard3",
+  "lede": "Run the upstream Hazard3 CPU in a Prism SoC: fetch the tested Hazard3 version, select it in your SoC manifest, test it and build it for the board.",
+  "audience": "rtl",
+  "prerequisites": [
+    "The tools from [Install tools and run a simulation](#/guides/getting-started#1-install-the-tools). You also need Git to fetch the Hazard3 source.",
+    "A SoC manifest, as in [Build a SoC and run a program on it](#/tutorials/instantiate-core)."
+  ],
+  "outcome": "A SoC that runs unmodified upstream Hazard3 with Prism's memory and peripherals, in simulation and on the board.",
+  "stages": [
+    {
+      "id": "source",
+      "title": "Fetch the Hazard3 source",
+      "text": "Prism does not include Hazard3's source. Fetch the tested version into the place the build expects. The build then patches a copy of it for the simulator; you do nothing more unless you update Hazard3.",
+      "guide": [
+        {
+          "doc": "docs/hazard3.md",
+          "section": "1. Install the pinned source"
+        }
+      ]
+    },
+    {
+      "id": "select",
+      "title": "Select Hazard3 in your SoC manifest",
+      "text": "Selecting Hazard3 is the same one-key edit as for any other core.",
+      "guide": [
+        {
+          "doc": "docs/configuration.md",
+          "section": "4. Change the core"
+        }
+      ],
+      "see": [
+        {
+          "href": "#/architecture/datapath/hazard3",
+          "text": "Hazard3 core"
+        }
+      ]
+    },
+    {
+      "id": "test",
+      "title": "Test the connection",
+      "text": "Hazard3 speaks AHB; Prism connects it through an adapter on each memory port. Lint the SoC and run the adapter test.",
+      "guide": [
+        {
+          "doc": "docs/hazard3.md",
+          "section": "2. Test the connection"
+        }
+      ]
+    },
+    {
+      "id": "firmware",
+      "title": "Run firmware",
+      "text": "Prism compiles firmware for the instruction set Hazard3 is built with, including multiply, atomics and compressed instructions. Run a program in simulation before building for the board.",
+      "guide": [
+        {
+          "doc": "docs/hazard3.md",
+          "section": "3. Run firmware"
+        },
+        {
+          "doc": "docs/hazard3.md",
+          "section": "Native CPU reference"
+        }
+      ]
+    },
+    {
+      "id": "board",
+      "title": "Build it for the board",
+      "text": "Hazard3 needs a lower CPU clock than Base on this board. Set the clock in your system manifest, then build and program.",
+      "guide": [
+        {
+          "doc": "docs/fpga.md",
+          "section": "2. Handle a clock or timing failure"
+        },
+        {
+          "doc": "docs/nexys_video_quickstart.md",
+          "section": "4. Build and program"
+        }
+      ],
+      "see": [
+        {
+          "href": "#/tutorials/instantiate-core",
+          "text": "Build a SoC and run a program on it"
+        }
+      ]
+    }
+  ],
+  "next": [
+    {
+      "href": "#/tutorials/custom-tile",
+      "text": "Write your own core"
+    },
+    {
+      "href": "#/tutorials/systems",
+      "text": "Put SoCs on a board"
+    },
+    {
+      "href": "#/architecture/datapath/hazard3",
+      "text": "Hazard3 core"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+/* Program editor: the same theme tokens as the documentation and diagrams. */
+.ce { margin: 1.5rem 0 2.5rem; padding: 1.25rem; border: 1px solid var(--rule); border-radius: var(--radius-l); background: var(--surface); min-width: 0; }
+.ce h2 { font-size: 1.35rem; margin-top: 0; }
+.ce-profile { color: var(--ink); font-size: 0.9rem; margin: 0.65rem 0 0; }
+.ce-help { color: var(--muted); font-size: 0.875rem; margin: 0.5rem 0 1rem; max-width: 90ch; }
+.ce-controls { display: flex; align-items: flex-end; flex-wrap: wrap; gap: 0.65rem; margin: 1rem 0; }
+.ce-field { display: flex; flex-direction: column; gap: 0.25rem; min-width: 0; }
+.ce label { font-size: 0.85rem; font-weight: 600; }
+.ce-source-label { display: block; margin-bottom: 0.4rem; }
+.ce button, .ce select, .ce input { font: inherit; font-size: 0.875rem; color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-s); padding: 0.4rem 0.65rem; min-height: 2.4rem; max-width: 100%; }
+.ce button, .ce select { cursor: pointer; }
+.ce button:hover:not(:disabled) { background: var(--sunken); }
+.ce input[type="number"] { width: 11rem; }
+.ce button.ce-run { background: var(--link); border-color: var(--link); color: var(--surface); font-weight: 600; }
+.ce button.ce-run:hover:not(:disabled) { background: var(--focus); }
+.ce button:disabled { cursor: not-allowed; background: var(--sunken); color: var(--muted); border-color: var(--rule); }
+.ce-source { display: block; width: 100%; min-height: 17rem; resize: vertical; padding: 0.85rem 1rem; border: 1px solid var(--rule-strong); border-radius: var(--radius-m); background: var(--sunken); color: var(--ink); font: 0.875rem/1.65 var(--font-mono); tab-size: 4; white-space: pre; overflow: auto; }
+.ce-source[aria-invalid="true"] { border-color: var(--error); }
+.ce-position { display: block; color: var(--muted); font: 0.75rem/1.5 var(--font-mono); margin: 0.3rem 0; }
+.ce-status { font-size: 0.9rem; margin: 0.75rem 0; }
+.ce-errors { padding-left: 1.25rem; margin: 0.5rem 0; color: var(--error); }
+.ce-errors:empty { display: none; }
+.ce-errors button { border: 0; background: none; color: var(--error); text-align: left; text-decoration: underline; text-underline-offset: 0.2em; padding: 0.25rem; min-height: 2rem; overflow-wrap: anywhere; }
+.ce-errors .ce-warning, .ce-errors .ce-warning button { color: var(--caution); }
+.ce-listing { margin-top: 0.75rem; font-size: 0.875rem; }
+.ce-listing[hidden] { display: none; }
+.ce-listing summary { cursor: pointer; width: fit-content; }
+.ce-listing pre { overflow: auto; max-height: 24rem; padding: 0.75rem; background: var(--sunken); border: 1px solid var(--rule); border-radius: var(--radius-s); line-height: 1.6; }
+.ce :is(button, select, input, textarea, summary, pre):focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+@media (max-width: 600px) {
+  .ce { padding: 0.85rem; }
+  .ce-field { flex: 1 1 12rem; }
+  .ce select { width: 100%; }
+  .ce-source { padding: 0.65rem; }
+}

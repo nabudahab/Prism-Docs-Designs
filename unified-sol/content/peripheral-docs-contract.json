@@ -1,0 +1,195 @@
+{
+  "schema_version": 1,
+  "title": "Peripheral docs contract",
+  "lede": "Create a register reference in your browser from a register description and optional memory map, component manifest and RTL module. Optional module headers are retained in JSON metadata. Nothing is uploaded, and the published address map is never changed.",
+  "sections": [
+    {
+      "id": "inputs",
+      "title": "What you supply",
+      "paragraphs": [
+        "Only the register description is required. Optional inputs add context to the page or portable JSON.",
+        "Use UTF-8 files up to 1 MiB each. Generated JSON also stays within 1 MiB so it can be reopened by the tool."
+      ],
+      "table": {
+        "columns": [
+          "Input",
+          "Required",
+          "Used for"
+        ],
+        "rows": [
+          [
+            "Register description (TOML)",
+            "Yes",
+            "Layout name, software contract ID, registers, offsets, access, fields"
+          ],
+          [
+            "Memory map (TOML) or a published base-map region",
+            "No",
+            "Region base address and reserved size; adds an address column"
+          ],
+          [
+            "Component manifest (TOML)",
+            "No",
+            "Component name, top module, software contract ID, register_bytes"
+          ],
+          [
+            "RTL file (.sv) and a module name",
+            "No",
+            "The // comment block directly above that module, copied as text"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "register-description",
+      "title": "Write the register description",
+      "paragraphs": [
+        "Use Prism's register schema. Either your full component manifest or the reduced SDK form below works: name, [interfaces] software and [[registers]], without RTL paths.",
+        "The tool checks the same rules as Prism's registers.py load(). Registers are 32-bit words at increasing, 4-byte-aligned offsets. Access is ro, rw or wo; a write-one-to-clear register is rw. The schema has no reset-value or side-effect keys: describe that behavior in the module header."
+      ],
+      "bullets": [
+        "Names are lowercase identifiers ([a-z][a-z0-9_]*) and not C/C++ keywords.",
+        "Each field has exactly lsb (0-31) and width (1 to 32 - lsb). Fields in one register do not overlap.",
+        "A retired standalone *.registers.toml (schema_version, name, contract) is still read, with a notice. The tool never writes that form.",
+        "When register_bytes is present, the register description must fit inside that register window."
+      ],
+      "code": [
+        {
+          "language": "toml",
+          "label": "uart.toml, reduced SDK form (excerpt: first three registers)",
+          "text": "name = \"uart\"\n\n[interfaces]\nsoftware = \"prism_uart_registers_v1\"\n\n[[registers]]\nname = \"tx\"\noffset = 0\naccess = \"wo\"\n\n[[registers]]\nname = \"rx\"\noffset = 4\naccess = \"ro\"\n\n[[registers]]\nname = \"status\"\noffset = 8\naccess = \"rw\"\n[registers.fields]\ntx_ready = { lsb = 0, width = 1 }\nrx_valid = { lsb = 1, width = 1 }\noverrun = { lsb = 2, width = 1 }\nframe_error = { lsb = 3, width = 1 }"
+        }
+      ]
+    },
+    {
+      "id": "module-header",
+      "title": "Write the module header",
+      "paragraphs": [
+        "The optional comment block directly above your module is copied exactly into JSON metadata and never interpreted. It is not rendered as a duplicate section on peripheral pages. Prism's uart.sv is the model.",
+        "Select the RTL file and name the module. The tool offers the component manifest's top module, but never picks one for you."
+      ],
+      "bullets": [
+        "Start with a sentence or two on the peripheral's role, then a blank // line.",
+        "Add a fixed-width table with the columns Offset, Name, Access and Fields and side effects. Use hex offsets, uppercase names, RO, WO, RW or RO/W1C, and fields such as [7:0] NAME or [1] NAME (W1C).",
+        "Finish with a blank // line and notes on aliases, byte lanes, errors and reset.",
+        "Put the block on the lines directly above the module keyword, with no blank line between."
+      ],
+      "code": [
+        {
+          "language": "systemverilog",
+          "label": "source/soc/peripherals/rtl/uart.sv (excerpt)",
+          "text": "`include \"mmio_if.vh\"\n\n// UART: 8N1 transmitter and receiver with a one-byte receive holding register\n// (no FIFO), attached directly to the peripheral bus (mmio_if.vh).\n//\n// Offset  Name         Access  Fields and side effects\n// 0x00    TX           WO      [7:0] byte to send. Starts a frame and clears\n//                              IRQ_PENDING.TX_COMPLETE. The write stalls (ready\n//                              low) until the previous frame has finished.\n//                              Reads return 0.\n// 0x04    RX           RO      [7:0] received byte. Reading it clears RX_VALID.\n// ...\nmodule uart #("
+        }
+      ]
+    },
+    {
+      "id": "copy-rules",
+      "title": "Which comments are copied",
+      "paragraphs": [
+        "The header is the run of // lines ending on the line directly above the selected module keyword. The tool removes the // and one following space from each line and keeps the rest, including alignment. Comment markers or the word module inside strings and comments never count as code."
+      ],
+      "table": {
+        "columns": [
+          "Comment",
+          "Copied?"
+        ],
+        "rows": [
+          [
+            "// block directly above the selected module",
+            "Yes, verbatim"
+          ],
+          [
+            "// block separated from the module by a blank line",
+            "No; the page shows a notice"
+          ],
+          [
+            "/* */ block above the module",
+            "No; not supported in this version, with a notice"
+          ],
+          [
+            "Tool directives (verilator, synthesis, pragma, translate_off ...)",
+            "Never; copying stops at the directive"
+          ],
+          [
+            "File or licence header above the `include lines",
+            "No"
+          ],
+          [
+            "Parameter, port and in-module comments",
+            "No"
+          ],
+          [
+            "Comments on other modules in the same file",
+            "No"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "generated",
+      "title": "What the tool generates",
+      "paragraphs": [
+        "Every fact in the register table comes from your TOML. Names and access appear exactly as written, so a register your header calls RO/W1C still shows rw. Optional module headers remain in JSON metadata; the tool does not reconcile them with the TOML.",
+        "A region is an address reservation, not proof that a device is installed. The UART reserves 4 KiB at 0x40020000 but the SoC decoder routes only its 24-byte register window (register_bytes) to the component."
+      ],
+      "bullets": [
+        "Identity: title, layout name, software contract ID, component and top module.",
+        "Optional module header, file name, module name and line range retained in JSON metadata.",
+        "Register table: hex offset, address (base + offset) when a region is selected, name, access, fields with bit range and mask, and rows for gaps between registers.",
+        "Notices and source files with SHA-256 hashes. No local paths or timestamps.",
+        "Never added: reset values, side effects, access sequences or interrupt assignments."
+      ]
+    },
+    {
+      "id": "errors",
+      "title": "Errors and notices",
+      "paragraphs": [
+        "An error stops generation and names the file and reason. A notice keeps the page and explains what is missing. Leaving out an optional input removes its context without a notice."
+      ],
+      "table": {
+        "columns": [
+          "Situation",
+          "Result"
+        ],
+        "rows": [
+          [
+            "Invalid TOML or register rule failure",
+            "Error"
+          ],
+          [
+            "Component and register software contract IDs differ",
+            "Error"
+          ],
+          [
+            "Module name missing, not found or declared twice",
+            "Error"
+          ],
+          [
+            "Last register past the selected region",
+            "Error"
+          ],
+          [
+            "No // header directly above the module",
+            "Notice; JSON has no header"
+          ],
+          [
+            "Last register past the component's register_bytes",
+            "Error"
+          ],
+          [
+            "Retired register file form",
+            "Notice"
+          ]
+        ]
+      }
+    },
+    {
+      "id": "downloads",
+      "title": "Share the result",
+      "paragraphs": [
+        "Download a standalone HTML page, styled like this website, with no scripts or external resources. Also download a JSON file (schema prism-peripheral-doc-v1) that the tool can open again. The same inputs always produce the same files.",
+        "Your page is separate from this website. To change Prism or the published address map, contribute to Prism itself."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 32">
+  <!-- Mid-tone colours so the mark reads on light and dark backgrounds. -->
+  <path d="M1.5 20.5 L11 16.6" stroke="#8A94A6" stroke-width="2" stroke-linecap="round"/>
+  <path d="M17 3.5 L28.5 27 L5.5 27 Z" fill="#FFFFFF" stroke="#18202C" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M11 16.6 L22.3 14.6 L24.3 18.7 Z" fill="#B7C0CC"/>
+  <path d="M22.3 14.6 L38.5 7.5" stroke="#E0526F" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M23 16 L38.5 12.8" stroke="#E09A1C" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M23.6 17.3 L38.5 18.2" stroke="#1BA3B8" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M24.3 18.7 L38.5 23.5" stroke="#8A6CF0" stroke-width="2.2" stroke-linecap="round"/>
+</svg>

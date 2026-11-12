@@ -1,0 +1,194 @@
+/* Interactive core datapath diagrams. Uses the site's tokens from prism.css. */
+
+.cd {
+  --i0: #2F6FD0; --i1: #A65A0E; --i2: #1E7A50; --i3: #8B52C9; --i4: #0F7385; --i5: #806610;
+  --chip-ink: #FFFFFF;
+  --hot: var(--c-system);
+  --wait: #9A5E10;
+  --wire: var(--rule-strong);
+  --ctl-line: color-mix(in srgb, var(--c-bus) 55%, var(--rule-strong));
+  --trap-line: color-mix(in srgb, var(--c-system) 40%, var(--rule-strong));
+  --block: var(--surface);
+  --block-line: #8D98A8;
+  --tint-alu: color-mix(in srgb, var(--c-cache) 11%, var(--surface));
+  --tint-mem: color-mix(in srgb, var(--c-cache) 7%, var(--surface));
+  --tint-ctl: color-mix(in srgb, var(--c-bus) 8%, var(--surface));
+  --tint-trap: color-mix(in srgb, var(--c-system) 7%, var(--surface));
+  --bar: color-mix(in srgb, var(--ink) 14%, var(--surface));
+  margin: 1.25rem 0 2rem;
+}
+:root[data-theme="dark"] .cd, .cd.dark {
+  --i0: #6EA4FF; --i1: #F0A055; --i2: #5CCB91; --i3: #B993FF; --i4: #4FC9DA; --i5: #D8BC4E;
+  --wait: #E8B04A;
+  --chip-ink: #0C1118;
+  --block-line: #5E6B80;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .cd {
+    --i0: #6EA4FF; --i1: #F0A055; --i2: #5CCB91; --i3: #B993FF; --i4: #4FC9DA; --i5: #D8BC4E;
+    --wait: #E8B04A;
+    --chip-ink: #0C1118;
+    --block-line: #5E6B80;
+  }
+}
+
+/* ---------- toolbar ---------- */
+.cd-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; padding: 0.6rem 0.75rem; border: 1px solid var(--rule); border-bottom: 0; border-radius: var(--radius-l) var(--radius-l) 0 0; background: var(--surface); }
+.cd-group { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; }
+.cd-group-label { font-size: 0.8rem; color: var(--muted); margin-right: 0.15rem; }
+.cd button, .cd select { font: inherit; font-size: 0.875rem; color: var(--ink); background: var(--surface); border: 1px solid var(--rule-strong); border-radius: var(--radius-s); padding: 0.25rem 0.55rem; min-height: 2rem; cursor: pointer; }
+.cd button:hover { background: var(--sunken); }
+.cd button:focus-visible, .cd select:focus-visible, .cd input:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.cd button[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.cd .cd-icon { width: 2.1rem; padding: 0.25rem 0; text-align: center; font-family: var(--font-mono); }
+.cd input[type="range"] { accent-color: var(--link); }
+.cd-zoom { gap: 0.4rem; }
+.cd-zoom-label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; }
+.cd-zoom input { width: clamp(3.5rem, 10vw, 9rem); min-width: 0; }
+.cd-zoom-value { width: 4ch; text-align: right; font: 0.8rem var(--font-mono); font-variant-numeric: tabular-nums; }
+/* The cycle controls fill their row; the slider takes up the slack so the
+   group never overflows and its neighbours do not move as the cycle changes. */
+.cd-cycles { flex: 1 1 34rem; min-width: 0; }
+.cd-cycles input[type="range"] { flex: 1 1 8rem; min-width: 6rem; width: auto; }
+.cd-cycle { font-family: var(--font-mono); font-size: 0.875rem; white-space: nowrap; }
+.cd-layers label { font-size: 0.85rem; display: inline-flex; align-items: center; gap: 0.25rem; margin-right: 0.4rem; cursor: pointer; }
+
+/* ---------- narration ---------- */
+.cd-now { border: 1px solid var(--rule); border-bottom: 0; background: var(--sunken); padding: 0.55rem 0.9rem; min-height: 4.4rem; }
+.cd-now p { margin: 0.1rem 0; font-size: 0.9rem; }
+.cd-now .cd-now-head { font-weight: 600; }
+.cd-now code { font-size: 0.85em; }
+.cd-chip { display: inline-block; font-family: var(--font-mono); font-size: 0.8rem; padding: 0 0.4rem; border-radius: 999px; color: var(--chip-ink); margin-right: 0.3rem; vertical-align: 0.05rem; }
+
+/* ---------- figure ---------- */
+.cd-figure { border: 1px solid var(--rule); background: var(--paper); overflow: auto; overscroll-behavior-x: contain; }
+.cd-figure svg { display: block; width: var(--diagram-w, 100%); min-width: 0; max-width: none; height: auto; margin-inline: auto; font-family: var(--font-sans); }
+.cd-figure.zoom { max-height: 72vh; max-height: 72svh; }
+/* Zoom tracks the slider directly, including with reduced-motion styles. */
+.cd-figure, .cd-figure svg { transition: none !important; }
+.cd-foot { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem); border: 1px solid var(--rule); border-top: 0; border-radius: 0 0 var(--radius-l) var(--radius-l); background: var(--surface); }
+.cd-foot > * { min-width: 0; }
+@media (max-width: 900px) { .cd-foot { grid-template-columns: 1fr; } }
+
+/* SVG parts */
+.cd svg text { fill: var(--ink); }
+.cd .region rect { fill: none; stroke: var(--rule); stroke-dasharray: 4 4; }
+.cd .region text { fill: var(--muted); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.cd .stage-head { fill: var(--muted); font-size: 15px; font-weight: 600; letter-spacing: 0.05em; }
+.cd .blk { cursor: pointer; }
+.cd .blk .shape { fill: var(--block); stroke: var(--block-line); stroke-width: 1.2; }
+.cd .blk.k-alu .shape, .cd .blk.k-add .shape { fill: var(--tint-alu); }
+.cd .blk.k-mem .shape { fill: var(--tint-mem); }
+.cd .blk.k-ctl .shape { fill: var(--tint-ctl); }
+.cd .blk.k-trap .shape { fill: var(--tint-trap); }
+.cd .blk.k-bar .shape, .cd .blk.k-reg .shape { fill: var(--bar); }
+.cd .blk.k-mux .shape { fill: var(--block); }
+.cd .blk .t { font-size: 15px; font-weight: 600; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+.cd .blk .s { font-size: 11.5px; font-family: var(--font-mono); fill: var(--muted); text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+.cd .blk.k-mux .t, .cd .blk.k-add .t { font-size: 11px; font-weight: 600; }
+.cd .blk .pin { font-size: 10.5px; font-family: var(--font-mono); fill: var(--muted); dominant-baseline: middle; pointer-events: none; }
+.cd .blk:hover .shape, .cd .blk.sel .shape, .cd .blk:focus-visible .shape { stroke: var(--focus); stroke-width: 2.4; }
+.cd .blk:focus { outline: none; }
+.cd .contract-chip:focus-visible rect { stroke-width: 3; }
+.cd .blk.on .shape { stroke: var(--ink); stroke-width: 1.8; }
+.cd .blk.wait .shape { stroke: var(--wait); stroke-width: 2.4; stroke-dasharray: 5 3; }
+.cd .blk .badge rect { fill: var(--ink); }
+.cd .blk .badge text { fill: var(--surface); font-size: 10.5px; font-family: var(--font-mono); text-anchor: middle; dominant-baseline: middle; }
+.cd .blk .clk { fill: none; stroke: var(--block-line); }
+.cd .layer-off { display: none; }
+
+/* Wires at rest are solid tints of the page colour, not translucent, so
+   crossings and junction dots do not darken where they overlap. */
+.cd .wire { color: color-mix(in srgb, var(--wire) 40%, var(--paper)); cursor: pointer; }
+.cd .wire.ctl { color: color-mix(in srgb, var(--ctl-line) 40%, var(--paper)); }
+.cd .wire.trap { color: color-mix(in srgb, var(--trap-line) 40%, var(--paper)); }
+.cd .wire .ln, .cd .lit .ln, .cd .lit .pulse { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linejoin: round; }
+.cd .wire .ah, .cd .lit .ah, .cd .wire .dot, .cd .lit-layer .dot { fill: currentColor; }
+.cd .wire .hit { fill: none; stroke: transparent; stroke-width: 11; }
+.cd .wire.ctl .ln, .cd .lit.ctl .ln { stroke-dasharray: 5 3; }
+.cd .wire.bus .ln { stroke-width: 2.6; }
+.cd .wl { font-size: 11.5px; font-family: var(--font-mono); fill: var(--muted); paint-order: stroke; stroke: var(--paper); stroke-width: 3.5px; stroke-linejoin: round; pointer-events: none; }
+.cd .wl.ctl { fill: color-mix(in srgb, var(--c-bus) 80%, var(--ink)); }
+
+/* Lit parts are drawn over the wires at rest; the hovered and the selected
+   wire over those. */
+.cd .lit-layer, .cd .focus { pointer-events: none; }
+.cd .lit .ln { stroke-width: 2.8; }
+.cd .lit.ctl .ln { stroke-width: 2.2; }
+.cd .lit.bus .ln { stroke-width: 3.8; }
+.cd .lit.hot .ln { stroke-width: 3.4; }
+/* Signal flow: a short bead in the wire's own colour, a little wider than the
+   wire, so it reads as a bulge travelling along it and never as a gap. */
+.cd .lit .pulse { stroke-linecap: round; stroke-width: 5.6; }
+.cd .lit.ctl .pulse { stroke-width: 4.8; }
+.cd .lit.bus .pulse { stroke-width: 6.8; }
+.cd .lit.hot .pulse { stroke-width: 6.2; }
+.cd .wire.focus { color: var(--focus); }
+.cd .wire.focus .ln { stroke-width: 3; }
+.cd .vtag rect { fill: var(--surface); stroke: currentColor; stroke-width: 1; }
+.cd .vtag text { font-size: 11px; font-family: var(--font-mono); fill: var(--ink); dominant-baseline: middle; text-anchor: middle; }
+.cd .contract-line { stroke: var(--c-cache); stroke-width: 2; stroke-dasharray: 7 5; }
+.cd .contract-chip rect { fill: var(--surface); stroke: var(--c-cache); }
+.cd .contract-chip text { fill: var(--c-cache); font-family: var(--font-mono); font-size: 12px; font-weight: 600; text-anchor: middle; dominant-baseline: middle; }
+.cd .token rect { stroke: none; }
+.cd .token text { fill: var(--chip-ink); font-family: var(--font-mono); font-size: 12px; dominant-baseline: middle; text-anchor: middle; font-weight: 600; }
+.cd .bubble rect { fill: var(--surface); stroke: var(--muted); stroke-dasharray: 3 2; }
+.cd .bubble text { fill: var(--muted); font-family: var(--font-mono); font-size: 12px; dominant-baseline: middle; text-anchor: middle; }
+
+/* ---------- timeline / pipeline chart ---------- */
+.cd-chart { padding: 0.75rem 0.9rem 0.9rem; border-right: 1px solid var(--rule); }
+@media (max-width: 900px) { .cd-chart { border-right: 0; border-bottom: 1px solid var(--rule); } }
+.cd-chart h3, .cd-detail h3 { font-size: 0.95rem; margin: 0 0 0.4rem; }
+.cd-chart .hint { font-size: 0.8rem; color: var(--muted); margin: 0 0 0.5rem; }
+.cd-grid-wrap { overflow-x: auto; max-height: 26rem; overflow-y: auto; border: 1px solid var(--rule); border-radius: var(--radius-s); }
+/* Theme-coloured scrollbars (Firefox otherwise uses the system theme, light on a dark page). */
+.cd-figure, .cd-grid-wrap, .ce-listing pre, .ce-source { scrollbar-color: var(--rule-strong) var(--sunken); }
+table.cd-grid { border-collapse: separate; border-spacing: 0; font-family: var(--font-mono); font-size: 11px; }
+.cd-grid th, .cd-grid td { padding: 0; height: 1.35rem; text-align: center; }
+.cd-grid th.ins { position: sticky; left: 0; z-index: 2; background: var(--surface); text-align: left; padding: 0 0.6rem 0 0.4rem; font-weight: 400; white-space: nowrap; border-right: 1px solid var(--rule); cursor: pointer; }
+.cd-grid th.ins .pc { color: var(--muted); margin-right: 0.4rem; }
+.cd-grid tr.squashed th.ins { color: var(--muted); text-decoration: line-through; }
+.cd-grid tr.trapped th.ins::after { content: "· trap"; display: inline-block; margin-left: 0.35em; color: var(--hot); font-weight: 600; text-decoration: none; }
+.cd-grid tr.cur th.ins { font-weight: 700; }
+.cd-grid thead th { position: sticky; top: 0; z-index: 1; background: var(--surface); color: var(--muted); font-weight: 400; min-width: 1.6rem; border-bottom: 1px solid var(--rule); cursor: pointer; }
+.cd-grid thead th.ins { z-index: 3; }
+.cd-grid td { min-width: 1.6rem; cursor: pointer; border-right: 1px solid color-mix(in srgb, var(--rule) 45%, transparent); }
+.cd-grid td.c { color: var(--chip-ink); font-weight: 600; }
+.cd-grid td.c.stall { background: var(--surface) !important; color: var(--ink); box-shadow: inset 0 0 0 2px var(--cell); font-weight: 400; }
+.cd-grid td.c.sq { background-image: repeating-linear-gradient(135deg, transparent 0 3px, rgba(255,255,255,0.45) 3px 5px); }
+.cd-grid td.now, .cd-grid th.now { box-shadow: inset 2px 0 0 var(--ink), inset -2px 0 0 var(--ink); }
+.cd-grid thead th.now { color: var(--ink); font-weight: 700; }
+.cd-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 0.9rem; font-size: 0.8rem; color: var(--muted); margin-top: 0.5rem; }
+.cd-legend span::before { content: ""; display: inline-block; width: 0.9rem; height: 0.55rem; margin-right: 0.3rem; vertical-align: 0.05rem; border-radius: 2px; background: var(--sw, var(--muted)); }
+.cd-legend .k-fwd { --sw: var(--hot); }
+.cd-legend .k-wait { --sw: var(--wait); }
+.cd-legend .k-ctl { --sw: color-mix(in srgb, var(--c-bus) 55%, var(--rule-strong)); }
+
+/* ---------- detail ---------- */
+.cd-detail { padding: 0.75rem 0.9rem 0.9rem; }
+.cd-detail .kind { font-size: 0.8rem; color: var(--muted); }
+.cd-detail h4 { margin: 0.1rem 0 0.35rem; font-size: 1.05rem; }
+.cd-detail p { font-size: 0.875rem; margin: 0.35rem 0; }
+.cd-detail .src { font-size: 0.8rem; color: var(--muted); }
+.cd-detail .src code { font-size: 0.8rem; overflow-wrap: anywhere; }
+.cd-detail .now-val { font-family: var(--font-mono); font-size: 0.85rem; background: var(--sunken); padding: 0.3rem 0.5rem; border-radius: var(--radius-s); }
+.cd-detail:focus { outline: none; }
+
+.cd-figure { cursor: default; }
+.cd-figure.pannable { cursor: grab; }
+.cd-figure.pannable:active { cursor: grabbing; }
+.cd-figure:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.cd-inspect { display: block; margin-top: 0.9rem; font-size: 0.85rem; color: var(--muted); }
+.cd-inspect select { display: block; width: 100%; margin-top: 0.25rem; }
+.cd-grid th.ins:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
+.cd-group[hidden] { display: none; }
+.cd-selbar { margin: 0; padding: 0.4rem 0.9rem; border: 1px solid var(--rule); border-bottom: 0; background: var(--surface); font-size: 0.875rem; }
+.cd-selbar[hidden] { display: none; }
+.cd-detail > div:focus { outline: none; }
+
+/* Label jumps: visit counter and the chosen label's visits in the chart header */
+.cd-label-pos { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); display: inline-block; }
+.cd-grid thead th.mark { box-shadow: inset 0 3px 0 var(--link); }
+.cd button:disabled { opacity: 0.45; cursor: default; }
+.cd button:disabled:hover { background: var(--surface); }
+.cd-grid thead th.now.mark { box-shadow: inset 2px 0 0 var(--ink), inset -2px 0 0 var(--ink), inset 0 3px 0 var(--link); }

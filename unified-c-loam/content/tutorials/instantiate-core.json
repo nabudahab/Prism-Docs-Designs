@@ -1,0 +1,162 @@
+{
+  "schema": "prism-tutorial-v2",
+  "key": "instantiate-core",
+  "title": "Build a SoC and run a program on it",
+  "nav_title": "Build a SoC and run a program",
+  "lede": "Copy the supplied SoC manifest, choose its core, run a C program on it in simulation, then build it for a Nexys Video and upload the program over UART.",
+  "audience": "both",
+  "prerequisites": [
+    "The tools from [Install tools and run a simulation](#/guides/getting-started#1-install-the-tools).",
+    "For the board stages: a Nexys Video, and Vivado with Artix-7 support."
+  ],
+  "outcome": "Your own SoC manifest and system manifest, and a C program that runs on them in simulation and on the board.",
+  "stages": [
+    {
+      "id": "tools",
+      "title": "Install the tools",
+      "text": "Install the simulator, Make and the RISC-V compiler, and set the toolchain prefix.",
+      "guide": [
+        {
+          "doc": "docs/getting-started.md",
+          "section": "1. Install the tools"
+        }
+      ]
+    },
+    {
+      "id": "soc",
+      "title": "Copy the SoC manifest",
+      "text": "Copy the supplied SoC manifest to `local/soc.toml`. This one file describes your hardware: the core, the memory sizes and the peripherals. Check it, then run the RAM test.",
+      "guide": [
+        {
+          "doc": "docs/getting-started.md",
+          "section": "2. Copy your SoC manifest"
+        },
+        {
+          "doc": "docs/getting-started.md",
+          "section": "3. Run the RAM test"
+        }
+      ],
+      "see": [
+        {
+          "href": "#/reference/address-map",
+          "text": "Address map"
+        }
+      ]
+    },
+    {
+      "id": "core",
+      "title": "Choose the core, its caches and its options",
+      "text": "A tile manifest, `local/tile.toml`, names the core and its two caches; changing the core or a cache is one line there. The core manifest requests its compiler ISA and microarchitecture settings; Base uses its ISA string to include or remove hardware multiply and divide. Read how the supplied cores differ, then make the edits.",
+      "guide": [
+        {
+          "doc": "docs/cores.md",
+          "section": "Choose a core"
+        },
+        {
+          "doc": "docs/configuration.md",
+          "section": "3. Add or remove integer multiply and divide"
+        },
+        {
+          "doc": "docs/configuration.md",
+          "section": "4. Change the core"
+        },
+        {
+          "doc": "docs/configuration.md",
+          "section": "Change caches"
+        }
+      ],
+      "see": [
+        {
+          "href": "#/architecture/core",
+          "text": "Core tiles"
+        }
+      ]
+    },
+    {
+      "id": "simulate",
+      "title": "Run a C program in simulation",
+      "text": "Build the blink program with Make and run it on your SoC in the simulator, before any board is involved.",
+      "guide": [
+        {
+          "doc": "docs/firmware.md",
+          "section": "2. Blink with Make"
+        },
+        {
+          "doc": "docs/firmware.md",
+          "section": "4. Simulate an application"
+        }
+      ],
+      "see": [
+        {
+          "href": "#/reference/platformio",
+          "text": "PlatformIO build"
+        }
+      ]
+    },
+    {
+      "id": "system",
+      "title": "Connect clocks, UART and LEDs",
+      "text": "Create `local/system.toml`. It names your SoC manifest, sets the clock frequencies and says which board pins carry the UART and the LEDs.",
+      "guide": [
+        {
+          "doc": "docs/nexys_video_quickstart.md",
+          "section": "3. Connect clocks, UART and LEDs"
+        }
+      ],
+      "see": [
+        {
+          "href": "#/tutorials/systems",
+          "text": "Put SoCs on a board"
+        }
+      ]
+    },
+    {
+      "id": "program",
+      "title": "Build and program the board",
+      "text": "Build the bitstream from your system manifest and program the FPGA. If timing fails, lower the CPU clock and build again.",
+      "guide": [
+        {
+          "doc": "docs/nexys_video_quickstart.md",
+          "section": "4. Build and program"
+        },
+        {
+          "doc": "docs/fpga.md",
+          "section": "2. Handle a clock or timing failure"
+        }
+      ]
+    },
+    {
+      "id": "upload",
+      "title": "Upload the program",
+      "text": "Build the program for the board and send it to the ROM loader over UART. Later program changes need only a rebuild and an upload.",
+      "guide": [
+        {
+          "doc": "docs/nexys_video_quickstart.md",
+          "section": "5. Build blink"
+        },
+        {
+          "doc": "docs/nexys_video_quickstart.md",
+          "section": "6. Upload and observe"
+        }
+      ]
+    }
+  ],
+  "next": [
+    {
+      "href": "#/guides/configuration",
+      "text": "Change your hardware"
+    },
+    {
+      "href": "#/tutorials/systems",
+      "text": "Put SoCs on a board"
+    },
+    {
+      "href": "#/tutorials/hazard3",
+      "text": "Use Hazard3"
+    },
+    {
+      "href": "#/tutorials/custom-tile",
+      "text": "Write your own core"
+    }
+  ]
+}

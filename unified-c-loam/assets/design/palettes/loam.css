@@ -1,0 +1,31 @@
+/* Loam: the grounded palette. Oat paper, espresso ink and a moss accent, with
+   peat and lichen after dark. Chroma is kept low everywhere except the four
+   layer colours, which alternate dark and light so they stay apart for
+   colour-blind readers: plum, lake, ochre and madder. */
+
+:root {
+  --paper: #F5F1E8; --surface: #FDFBF6; --sunken: #E9E3D5; --chrome: #EEE9DC;
+  --ink: #29241C; --muted: #625A4C; --rule: #DCD4C2; --rule-strong: #8A816E;
+  --link: #3C5A22; --focus: #4B6E2A; --accent: #3C5A22; --on-accent: #FDFBF6;
+  --ok: #226B52; --caution: #8A5407; --error: #A6321E; --warn-bg: #F6E7BE;
+  --c-cache: #5E3594; --c-bus: #237086; --c-mmio: #8D5E00; --c-system: #8E1B3D;
+  /* The Architecture beam panel stays dark in both themes. */
+  --beam-paper: #211C15; --beam-surface: #2C261D; --beam-ink: #F7F2E6; --beam-muted: #CDC4B0; --beam-rule: #7C725F;
+  --beam-system: #E69184; --beam-mmio: #F8CA65; --beam-bus: #7FDDDD; --beam-cache: #B49CF7;
+}
+:root[data-theme="dark"] {
+  --paper: #1B1814; --surface: #24201A; --sunken: #14120F; --chrome: #1F1C17;
+  --ink: #EBE5D7; --muted: #B3AA98; --rule: #3A342A; --rule-strong: #70685A;
+  --link: #B5CE8E; --focus: #B5CE8E; --accent: #B5CE8E; --on-accent: #1A2010;
+  --ok: #86D1B4; --caution: #E8BE6A; --error: #F29C88; --warn-bg: #332A12;
+  --c-cache: #B49CF7; --c-bus: #7FDDDD; --c-mmio: #F8CA65; --c-system: #E69184;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1B1814; --surface: #24201A; --sunken: #14120F; --chrome: #1F1C17;
+    --ink: #EBE5D7; --muted: #B3AA98; --rule: #3A342A; --rule-strong: #70685A;
+    --link: #B5CE8E; --focus: #B5CE8E; --accent: #B5CE8E; --on-accent: #1A2010;
+    --ok: #86D1B4; --caution: #E8BE6A; --error: #F29C88; --warn-bg: #332A12;
+    --c-cache: #B49CF7; --c-bus: #7FDDDD; --c-mmio: #F8CA65; --c-system: #E69184;
+  }
+}

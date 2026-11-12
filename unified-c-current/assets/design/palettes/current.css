@@ -1,0 +1,33 @@
+/* Current: the colours of the site as it is published now. Cool grey paper,
+   violet links, ink for the primary button and the current-page mark, and no
+   separate sidebar colour. The beam panel takes the page colours, as the
+   beam does on the current landing page. */
+:root {
+  --paper: #F5F6F8; --surface: #FFFFFF; --sunken: #ECEFF3; --chrome: #F5F6F8;
+  --ink: #18202C; --muted: #566173; --rule: #D9DEE5; --rule-strong: #B7C0CC;
+  --link: #3F35C9; --focus: #6E46E0; --accent: #18202C; --on-accent: #F5F6F8;
+  --ok: #1E7A4C; --caution: #8A5300; --error: #B4233F; --warn-bg: #FFF7E6;
+  --c-cache: #6E46E0; --c-bus: #0E7490; --c-mmio: #A16207; --c-system: #CF3D5C;
+  --beam-paper: #FFFFFF; --beam-surface: #FFFFFF; --beam-ink: #18202C; --beam-muted: #566173; --beam-rule: #D9DEE5;
+  --beam-system: #CF3D5C; --beam-mmio: #A16207; --beam-bus: #0E7490; --beam-cache: #6E46E0;
+}
+:root[data-theme="dark"] {
+  --paper: #10151E; --surface: #171E2A; --sunken: #0C1118; --chrome: #10151E;
+  --ink: #E4E9F1; --muted: #9AA6B7; --rule: #2A3444; --rule-strong: #3D4A5E;
+  --link: #A9A2FF; --focus: #A890FF; --accent: #E4E9F1; --on-accent: #10151E;
+  --ok: #5CCB91; --caution: #E8B04A; --error: #FF8299; --warn-bg: #2A2414;
+  --c-cache: #A08BFF; --c-bus: #3EC3D6; --c-mmio: #F0B23C; --c-system: #F27590;
+  --beam-paper: #171E2A; --beam-surface: #171E2A; --beam-ink: #E4E9F1; --beam-muted: #9AA6B7; --beam-rule: #2A3444;
+  --beam-system: #F27590; --beam-mmio: #F0B23C; --beam-bus: #3EC3D6; --beam-cache: #A08BFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10151E; --surface: #171E2A; --sunken: #0C1118; --chrome: #10151E;
+    --ink: #E4E9F1; --muted: #9AA6B7; --rule: #2A3444; --rule-strong: #3D4A5E;
+    --link: #A9A2FF; --focus: #A890FF; --accent: #E4E9F1; --on-accent: #10151E;
+    --ok: #5CCB91; --caution: #E8B04A; --error: #FF8299; --warn-bg: #2A2414;
+    --c-cache: #A08BFF; --c-bus: #3EC3D6; --c-mmio: #F0B23C; --c-system: #F27590;
+    --beam-paper: #171E2A; --beam-surface: #171E2A; --beam-ink: #E4E9F1; --beam-muted: #9AA6B7; --beam-rule: #2A3444;
+    --beam-system: #F27590; --beam-mmio: #F0B23C; --beam-bus: #3EC3D6; --beam-cache: #A08BFF;
+  }
+}

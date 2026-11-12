@@ -1,0 +1,31 @@
+/* Claret: the editorial palette. Salmon newsprint, wine-black ink and a
+   claret accent, turning to a dark cellar red with blush links. The layer
+   colours alternate dark and light so they stay apart for colour-blind
+   readers: ultramarine, teal, ochre and claret. */
+
+:root {
+  --paper: #FCEBE0; --surface: #FFF8F3; --sunken: #F2DBCE; --chrome: #F7E3D6;
+  --ink: #2A1A1D; --muted: #6A5154; --rule: #E7CFC3; --rule-strong: #997B7A;
+  --link: #8A1A3F; --focus: #A3264D; --accent: #8A1A3F; --on-accent: #FFF8F3;
+  --ok: #1D6A4B; --caution: #865206; --error: #B23A0E; --warn-bg: #FBE4B4;
+  --c-cache: #3A2FA8; --c-bus: #1E6E86; --c-mmio: #8A5A08; --c-system: #8E1244;
+  /* The Architecture beam panel stays dark in both themes. */
+  --beam-paper: #231419; --beam-surface: #2F1C22; --beam-ink: #FBF1EC; --beam-muted: #D3BDBA; --beam-rule: #86696F;
+  --beam-system: #F08A9C; --beam-mmio: #EBC868; --beam-bus: #58D8E6; --beam-cache: #98A4FA;
+}
+:root[data-theme="dark"] {
+  --paper: #1D1316; --surface: #27191D; --sunken: #160E10; --chrome: #211619;
+  --ink: #F3E7E1; --muted: #C3ADAA; --rule: #402E32; --rule-strong: #7D6368;
+  --link: #F4A9B8; --focus: #F4A9B8; --accent: #F4A9B8; --on-accent: #2B0D18;
+  --ok: #84D3AE; --caution: #EBC56A; --error: #FFA07A; --warn-bg: #35280F;
+  --c-cache: #98A4FA; --c-bus: #58D8E6; --c-mmio: #EBC868; --c-system: #F08A9C;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1D1316; --surface: #27191D; --sunken: #160E10; --chrome: #211619;
+    --ink: #F3E7E1; --muted: #C3ADAA; --rule: #402E32; --rule-strong: #7D6368;
+    --link: #F4A9B8; --focus: #F4A9B8; --accent: #F4A9B8; --on-accent: #2B0D18;
+    --ok: #84D3AE; --caution: #EBC56A; --error: #FFA07A; --warn-bg: #35280F;
+    --c-cache: #98A4FA; --c-bus: #58D8E6; --c-mmio: #EBC868; --c-system: #F08A9C;
+  }
+}

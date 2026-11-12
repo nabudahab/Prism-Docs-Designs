@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-palette="databook" data-design="unified-c">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prism documentation</title>
+  <meta name="description" content="Prism documentation: a configurable RISC-V SoC framework in synthesizable SystemVerilog. Guides, architecture explorers and hardware references.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="assets/prism-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/canon.css">
+  <link rel="stylesheet" href="assets/design/design.css">
+  <link rel="stylesheet" href="assets/design/palettes/databook.css">
+  <script>
+    // Apply a saved theme before first paint; storage may be unavailable on file://.
+    try {
+      var savedTheme = localStorage.getItem('prism-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') document.documentElement.setAttribute('data-theme', savedTheme);
+      // Wide screens: restore a hidden sidebar before first paint.
+      if (localStorage.getItem('prism-nav') === 'hidden') document.documentElement.classList.add('nav-hidden');
+    } catch (error) { /* keep the system preference */ }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="un-bar">
+    <div class="un-identity">
+      <button class="un-icon" type="button" aria-expanded="false" aria-controls="sidebar" id="menu-button">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+        <span class="visually-hidden" id="menu-label">Open navigation</span>
+      </button>
+      <a class="un-brand" href="#/" aria-label="Prism documentation home">
+        <svg viewBox="0 0 40 32" width="32" height="26" aria-hidden="true">
+          <path d="M17 3.5 L28.5 27 L5.5 27 Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+          <path d="M1 20.7 L11 16.6" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M22.3 14.6 L39 7.3" stroke="var(--c-system)" stroke-width="2"/>
+          <path d="M23 16 L39 12.7" stroke="var(--c-mmio)" stroke-width="2"/>
+          <path d="M23.6 17.3 L39 18.2" stroke="var(--c-bus)" stroke-width="2"/>
+          <path d="M24.3 18.7 L39 23.7" stroke="var(--c-cache)" stroke-width="2"/>
+        </svg>
+        <span>Prism</span>
+      </a>
+    </div>
+    <span class="un-bar-label">Documentation</span>
+    <button class="un-icon un-theme" type="button" id="theme-button">
+      <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>
+      <span class="visually-hidden" id="theme-label">Switch theme</span>
+    </button>
+  </header>
+  <div class="un-frame">
+    <nav class="un-tree" id="sidebar" aria-label="Documentation">
+      <div class="un-tree-head">
+        <span>Contents</span>
+        <button class="un-icon" type="button" id="close-button">
+          <svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6"/></svg>
+          <span class="visually-hidden">Close navigation</span>
+        </button>
+      </div>
+      <div class="un-find">
+        <label for="un-query">Search documentation <kbd aria-hidden="true">/</kbd></label>
+        <input id="un-query" type="search" autocomplete="off" spellcheck="false" placeholder="Page, register, 0x address">
+        <p class="un-find-status" id="un-find-status" role="status"></p>
+        <ul class="un-results" id="un-results" hidden></ul>
+      </div>
+      <div id="un-tree"></div>
+    </nav>
+    <div class="backdrop" id="backdrop" hidden></div>
+    <div class="un-document">
+      <nav class="un-trail" aria-label="Breadcrumb"><ol id="un-trail"></ol></nav>
+      <div class="un-body">
+        <div class="un-leaf">
+          <main id="main" tabindex="-1">
+            <noscript><div class="notice notice-error"><h1>JavaScript is off</h1><p>Enable JavaScript to read this documentation and use its interactive tools.</p></div></noscript>
+          </main>
+          <nav class="un-pager" id="un-pager" aria-label="Previous and next page"></nav>
+        </div>
+        <aside class="un-rail" id="un-rail" aria-label="On this page" hidden></aside>
+      </div>
+      <footer class="un-footer"><span>Prism documentation</span><a href="#/roadmap">Implementation roadmap</a></footer>
+    </div>
+  </div>
+  <div class="visually-hidden" aria-live="polite" id="announcer"></div>
+  <script src="data/reference.js"></script>
+  <script src="data/toml.js"></script>
+  <script src="data/tooling.js"></script>
+  <script src="data/roadmap.js"></script>
+  <script src="data/tutorials.js"></script>
+  <script src="data/guides.js"></script>
+  <script src="data/core-traces.js"></script>
+  <script src="data/sim-models.js"></script>
+  <script src="assets/core-diagrams.js"></script>
+  <script src="assets/core-model-singlecycle.js"></script>
+  <script src="assets/core-model-base.js"></script>
+  <script src="assets/core-model-hazard3.js"></script>
+  <script src="assets/rv-asm.js"></script>
+  <script src="assets/core-trace-compiler.js"></script>
+  <script src="assets/core-sim.js"></script>
+  <script src="assets/core-editor.js"></script>
+  <script src="assets/cache-model.js"></script>
+  <script src="assets/cache-explorer.js"></script>
+  <script src="assets/cache-coherence-model.js"></script>
+  <script src="assets/cache-coherence.js"></script>
+  <script src="assets/system-bus-model.js"></script>
+  <script src="assets/system-bus.js"></script>
+  <script src="assets/peripheral-docs.js"></script>
+  <script src="assets/peripheral-guide.js"></script>
+  <script src="assets/guides.js"></script>
+  <script src="assets/app.js"></script>
+  <script src="data/nav.js"></script>
+  <script src="assets/design/kit.js"></script>
+  <script src="assets/design/design.js"></script>
+</body>
+</html>
