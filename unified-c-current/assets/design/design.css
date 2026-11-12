@@ -277,8 +277,46 @@ thead th { color: var(--ink); background: var(--chrome); border-bottom-color: va
   --c-system: var(--beam-system); --c-mmio: var(--beam-mmio); --c-bus: var(--beam-bus); --c-cache: var(--beam-cache);
   margin: 0; padding: 1.75rem 1.25rem 1rem; background: var(--paper); border: 1px solid var(--beam-rule); border-radius: 5px;
 }
-.un-beam-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr); min-height: 22rem; }
-.un-beam .hero-art { grid-area: auto; max-width: none; height: 100%; }
+.un-beam-body { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(8.5rem, 0.75fr); min-height: 22rem; }
+.un-beam-art { position: relative; min-width: 0; }
+.un-beam-svg { position: absolute; inset: 0; display: block; width: 100%; height: 100%; overflow: visible; }
+.un-beam-svg path { fill: none; stroke-linecap: round; }
+.un-beam-in .core { stroke: var(--ink); stroke-width: 3; }
+.un-beam-in .halo, .un-ray .halo { stroke-width: 11; opacity: 0.16; }
+.un-beam-in .halo { stroke: var(--ink); }
+.un-prism { fill: url(#un-beam-glass); stroke: var(--ink); stroke-width: 2.25; stroke-linejoin: round; }
+.un-prism-flash { fill: none; stroke: var(--ink); stroke-width: 8; stroke-linejoin: round; opacity: 0; pointer-events: none; }
+.un-prism-sheen { stroke: var(--ink); stroke-width: 1.25; opacity: 0.4; }
+.un-fan { opacity: 0.45; }
+.un-fan polygon { stroke-width: 0.6; stroke-linejoin: round; }
+.un-inner { stroke: var(--ray); stroke-width: 1.4; opacity: 0.85; }
+.un-ray { cursor: pointer; transition: opacity 180ms ease; }
+.un-ray .core { stroke: var(--ray); stroke-width: 3; transition: stroke-width 180ms ease; }
+.un-ray .halo { stroke: var(--ray); transition: opacity 180ms ease, stroke-width 180ms ease; }
+.un-ray .flow { stroke: var(--ink); stroke-width: 2; stroke-dasharray: 0.035 0.1; opacity: 0; }
+.un-ray circle { fill: var(--ray); }
+.un-beam-body[data-focus] .un-ray:not([data-active]) { opacity: 0.3; }
+.un-ray:is([data-active], [data-selected]) .core { stroke-width: 4; }
+.un-ray[data-selected] .halo { stroke-width: 14; opacity: 0.26; }
+.un-ray[data-active] .halo { stroke-width: 16; opacity: 0.32; }
+.un-beam-labels li { transition: opacity 180ms ease; }
+.un-beam-body[data-focus] .un-beam-labels li:not(:hover):not(:focus-within) { opacity: 0.7; }
+@media (prefers-reduced-motion: no-preference) {
+  .un-beam[data-play] .un-beam-in path { stroke-dasharray: 1; animation: un-draw 650ms cubic-bezier(0.3, 0.6, 0.4, 1) both; }
+  .un-beam[data-play] .un-prism-flash { animation: un-flash 800ms ease-out 560ms both; }
+  .un-beam[data-play] .un-inner { stroke-dasharray: 1; animation: un-draw 320ms ease-out both; animation-delay: calc(620ms + var(--i) * 45ms); }
+  .un-beam[data-play] .un-fan { animation: un-fade 500ms ease-out 720ms both; }
+  .un-beam[data-play] .un-ray .core, .un-beam[data-play] .un-ray .halo { stroke-dasharray: 1; animation: un-draw 650ms cubic-bezier(0.2, 0.7, 0.3, 1) both; animation-delay: calc(920ms + var(--i) * 110ms); }
+  .un-beam[data-play] .un-ray circle { transform-box: fill-box; transform-origin: center; animation: un-pop 320ms cubic-bezier(0.3, 1.6, 0.5, 1) both; animation-delay: calc(1450ms + var(--i) * 110ms); }
+  .un-beam[data-play] .un-beam-labels li { animation: un-label 420ms ease-out both; animation-delay: calc(1450ms + var(--i) * 110ms); }
+  .un-ray[data-active] .flow { opacity: 0.55; animation: un-flow 1.6s linear infinite; }
+}
+@keyframes un-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes un-fade { from { opacity: 0; } }
+@keyframes un-flash { 0% { opacity: 0; } 30% { opacity: 0.3; } 100% { opacity: 0; } }
+@keyframes un-pop { from { transform: scale(0); } }
+@keyframes un-label { from { opacity: 0; transform: translateX(-8px); } }
+@keyframes un-flow { to { stroke-dashoffset: -1; } }
 .un-beam-labels { list-style: none; display: grid; grid-template-rows: repeat(4, 1fr); margin: 0; padding: 0; }
 .un-beam-labels li { display: flex; flex-direction: column; justify-content: center; align-items: start; }
 .un-beam-label { display: block; max-width: 100%; min-height: 40px; padding: 0.3rem 0.4rem; border: 1px solid transparent; border-radius: 3px; background: transparent; color: var(--ink); text-align: left; font: 650 0.95rem/1.2 var(--font-sans); cursor: pointer; overflow-wrap: anywhere; }
@@ -369,7 +407,6 @@ thead th { color: var(--ink); background: var(--chrome); border-bottom-color: va
   .un-stack-art { align-self: center; }
   .un-stack-art { height: auto; }
   .un-beam { padding: 1.5rem 0.75rem 0.85rem; }
-  .un-beam .hero-art { min-width: 0; }
   .un-map-rows > li { grid-template-columns: minmax(0, 1fr); }
   .un-map-bound { transform: none; padding-block: 0.45rem 0.25rem; }
   .un-map-body { border-bottom: 1px solid var(--rule-strong); }

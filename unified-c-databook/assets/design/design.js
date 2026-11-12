@@ -247,28 +247,91 @@
           })));
       }))));
   }
-  /* Canonical beam geometry, independent of the home view and router.
-     Every layer/contract label comes from this page's own parts list. */
+  /* The white beam through the prism, on the Architecture overview. The
+     figure is drawn in the panel's own pixels: the prism is equilateral at
+     any panel shape, and each ray ends level with its layer's label. Every
+     layer/contract label comes from this page's own parts list. */
   function architectureBeam() {
     var layers = [
-      { color: 'system', part: 'system', exit: [285, 170], end: [410, 62] },
-      { color: 'mmio', part: 'peripherals', contract: 'mmio_if', exit: [291.6, 185.6], end: [410, 142] },
-      { color: 'bus', part: 'fabric', contract: 'system_bus_if', exit: [298.2, 201.2], end: [410, 222] },
-      { color: 'cache', part: 'tile', contract: 'cache_fabric_if', exit: [304.8, 216.8], end: [410, 302] }
+      { color: 'system', part: 'system' },
+      { color: 'mmio', part: 'peripherals', contract: 'mmio_if' },
+      { color: 'bus', part: 'fabric', contract: 'system_bus_if' },
+      { color: 'cache', part: 'tile', contract: 'cache_fabric_if' }
     ];
-    function pt(point) { return point.join(','); }
-    var drawing = svg('svg', { class: 'hero-art', viewBox: '0 30 464 305', 'aria-hidden': 'true', focusable: 'false', preserveAspectRatio: 'none' },
-      svg('defs', null, svg('linearGradient', { id: 'un-beam-fan', gradientUnits: 'userSpaceOnUse', x1: 0, y1: 170, x2: 0, y2: 216.8 },
-        layers.map(function (layer, i) { return svg('stop', { offset: i / 3, 'stop-color': 'var(--c-' + layer.color + ')' }); }))),
-      svg('path', { class: 'beam', pathLength: 1, d: 'M0,236 L206,191' }),
-      svg('g', { transform: 'translate(40 0)' },
-        svg('polygon', { class: 'fan', points: '166,191 285,170 304.8,216.8', fill: 'url(#un-beam-fan)' }),
-        svg('path', { class: 'prism', d: 'M230,40 L340,300 L120,300 Z' })),
-      layers.map(function (layer, i) {
-        return svg('g', { class: 'ray', style: '--ray: var(--c-' + layer.color + '); --i: ' + i },
-          svg('path', { pathLength: 1, d: 'M' + pt([layer.exit[0] + 40, layer.exit[1]]) + ' L' + pt([layer.end[0] + 40, layer.end[1]]) }),
-          svg('circle', { cx: layer.end[0] + 40, cy: layer.end[1], r: 4.5 }));
-      }));
+    function stop(offset, style) { return svg('stop', { offset: offset, style: style }); }
+    function line(cls) { return svg('path', { class: cls, pathLength: 1 }); }
+    var incoming = svg('g', { class: 'un-beam-in' }, line('halo'), line('core'));
+    var prism = svg('polygon', { class: 'un-prism' }), flash = svg('polygon', { class: 'un-prism-flash' }), sheen = line('un-prism-sheen');
+    // The dispersed light inside the glass: thin wedges fanning out from the entry
+    // point, each the colour of the rays either side of it, so the colours run
+    // along the light paths and blend across them.
+    var SLICES = 36, fanSlices = [];
+    for (var k = 0; k < SLICES; k++) {
+      var u = (k + 0.5) / SLICES * (layers.length - 1), a = Math.min(Math.floor(u), layers.length - 2), f = u - a;
+      var colour = 'color-mix(in oklab, var(--c-' + layers[a].color + ') ' + ((1 - f) * 100).toFixed(1) + '%, var(--c-' + layers[a + 1].color + '))';
+      fanSlices.push(svg('polygon', { style: 'fill: ' + colour + '; stroke: ' + colour }));
+    }
+    var fan = svg('g', { class: 'un-fan' }, fanSlices);
+    var rays = layers.map(function (layer, i) {
+      var g = svg('g', { class: 'un-ray', style: '--ray: var(--c-' + layer.color + '); --i: ' + i },
+        line('halo'), line('core'), line('flow'), svg('circle', { r: 4.5 }));
+      g.addEventListener('click', function () { select(layer.part); });
+      return { layer: layer, g: g, inner: svg('path', { class: 'un-inner', pathLength: 1, style: '--ray: var(--c-' + layer.color + '); --i: ' + i }) };
+    });
+    var drawing = svg('svg', { class: 'un-beam-svg', 'aria-hidden': 'true', focusable: 'false' },
+      svg('defs', null,
+        svg('linearGradient', { id: 'un-beam-glass', x1: 0, y1: 0, x2: 1, y2: 1 },
+          stop(0, 'stop-color: var(--ink); stop-opacity: 0.16'), stop(1, 'stop-color: var(--ink); stop-opacity: 0.03'))),
+      incoming, prism, fan, rays.map(function (r) { return r.inner; }), sheen, flash, rays.map(function (r) { return r.g; }));
+    var art = el('div', { class: 'un-beam-art' }, drawing);
+
+    function at(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; }
+    function pts(list) { return list.map(function (p) { return p[0].toFixed(1) + ',' + p[1].toFixed(1); }).join(' '); }
+    function d(a, b) { return 'M' + pts([a]) + ' L' + pts([b]); }
+    function draw() {
+      var box = art.getBoundingClientRect(), W = box.width, H = box.height;
+      if (!W || !H) return;
+      drawing.setAttribute('viewBox', '0 0 ' + W.toFixed(1) + ' ' + H.toFixed(1));
+      var ys = Array.prototype.map.call(labels.children, function (li) { var r = (li.querySelector('button') || li).getBoundingClientRect(); return r.top + r.height / 2 - box.top; });
+      var mid = (ys[0] + ys[ys.length - 1]) / 2;
+      var side = Math.min(W * (W < 300 ? 0.68 : 0.56), H * 0.82 / (Math.sqrt(3) / 2)), h = side * Math.sqrt(3) / 2;
+      var cx = W * (W < 300 ? 0.4 : 0.38), apex = [cx, mid - h / 2], left = [cx - side / 2, mid + h / 2], right = [cx + side / 2, mid + h / 2];
+      // White light enters the left face rising slightly, and leaves the right face
+      // dispersed: the least-bent colour (system) highest, the most-bent lowest.
+      var entry = at(apex, left, 0.56), exits = rays.map(function (r, i) { return at(apex, right, 0.4 + i * 0.075); });
+      var start = [0, Math.min(H - 6, entry[1] + entry[0] * 0.24)];
+      incoming.querySelectorAll('path').forEach(function (path) { path.setAttribute('d', d(start, entry)); });
+      prism.setAttribute('points', pts([apex, right, left]));
+      flash.setAttribute('points', pts([apex, right, left]));
+      sheen.setAttribute('d', d(at(apex, left, 0.12), at(apex, left, 0.4)));
+      sheen.setAttribute('transform', 'translate(' + (side * 0.035).toFixed(1) + ' 0)');
+      var first = exits[0], last = exits[exits.length - 1];
+      fanSlices.forEach(function (slice, k) {
+        slice.setAttribute('points', pts([entry, at(first, last, k / SLICES), at(first, last, (k + 1) / SLICES)]));
+      });
+      rays.forEach(function (r, i) {
+        var end = [W - 5, ys[i]];
+        r.inner.setAttribute('d', d(entry, exits[i]));
+        r.g.querySelectorAll('path').forEach(function (path) { path.setAttribute('d', d(exits[i], end)); });
+        var dot = r.g.querySelector('circle'); dot.setAttribute('cx', end[0]); dot.setAttribute('cy', end[1]);
+      });
+    }
+    // Pointing at a layer, here or in its label, lights its ray; a selected layer stays lit.
+    var pointed = null;
+    function emphasise() {
+      var selected = null;
+      controls.some(function (button) { if (button.getAttribute('aria-pressed') === 'true') { selected = button.dataset.part; return true; } });
+      function owns(r, key) { return !!key && (r.layer.part === key || r.layer.contract === key); }
+      rays.forEach(function (r) {
+        r.g.toggleAttribute('data-active', owns(r, pointed));
+        r.g.toggleAttribute('data-selected', owns(r, selected));
+      });
+      body.toggleAttribute('data-focus', !!pointed);
+    }
+    rays.forEach(function (r) {
+      r.g.addEventListener('mouseenter', function () { pointed = r.layer.part; emphasise(); });
+      r.g.addEventListener('mouseleave', function () { pointed = null; emphasise(); });
+    });
     var controls = [];
     function select(key) {
       var target = main.querySelector('.arch-part[data-part="' + key + '"], .arch-seam[data-part="' + key + '"]');
@@ -289,21 +352,30 @@
       controls.push(button);
       return button;
     }
-    var labels = el('ol', { class: 'un-beam-labels' }, layers.map(function (layer) {
-      return el('li', { style: '--ray: var(--c-' + layer.color + ')' }, partButton(layer.part), layer.contract ? partButton(layer.contract, true) : null);
+    var labels = el('ol', { class: 'un-beam-labels' }, layers.map(function (layer, i) {
+      var item = el('li', { style: '--ray: var(--c-' + layer.color + '); --i: ' + i }, partButton(layer.part), layer.contract ? partButton(layer.contract, true) : null);
+      item.addEventListener('mouseenter', function () { pointed = layer.part; emphasise(); });
+      item.addEventListener('focusin', function () { pointed = layer.part; emphasise(); });
+      item.addEventListener('mouseleave', function () { pointed = null; emphasise(); });
+      item.addEventListener('focusout', function () { pointed = null; emphasise(); });
+      return item;
     }));
+    var body = el('div', { class: 'un-beam-body' }, art, labels);
     // Reflect selection made either here or in the canonical diagram.
     function syncSelection() {
       controls.forEach(function (button) {
         var target = main.querySelector('.arch-part[data-part="' + button.dataset.part + '"], .arch-seam[data-part="' + button.dataset.part + '"]');
         button.setAttribute('aria-pressed', target ? target.getAttribute('aria-pressed') : 'false');
       });
+      emphasise();
     }
     syncSelection();
     var observer = new MutationObserver(syncSelection);
     observer.observe(main.querySelector('.arch'), { subtree: true, attributes: true, attributeFilter: ['aria-pressed'] });
-    stopBeam = function () { observer.disconnect(); };
-    return el('div', { class: 'un-beam-body' }, drawing, labels);
+    var sizes = new ResizeObserver(draw);
+    sizes.observe(art); sizes.observe(labels);
+    stopBeam = function () { observer.disconnect(); sizes.disconnect(); };
+    return body;
   }
   function composeArchitecture(now) {
     if (now.path !== 'architecture' || main.querySelector('.un-beam')) return;
@@ -314,6 +386,8 @@
       el('figcaption', { text: 'One firmware address space, configurable hardware layers.' }));
     var opening = el('div', { class: 'un-architecture-intro' }, intro, figure);
     overview.prepend(opening);
+    // The sequence plays once the figure is laid out, so it starts from the drawn geometry.
+    requestAnimationFrame(function () { figure.setAttribute('data-play', ''); });
   }
   function composeAddress(now) {
     if (now.href !== '#/reference/address-map' || main.querySelector('.un-map-panel')) return;
