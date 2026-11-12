@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prism documentation</title>
+  <meta name="description" content="Prism: a bare-metal SoC in synthesizable SystemVerilog for firmware and RTL engineers. Architecture overview, firmware address map and PlatformIO build reference.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="assets/prism-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/prism.css">
+  <link rel="stylesheet" href="assets/core-diagrams.css">
+  <link rel="stylesheet" href="assets/core-editor.css">
+  <link rel="stylesheet" href="assets/cache-explorer.css">
+  <link rel="stylesheet" href="assets/cache-coherence.css">
+  <link rel="stylesheet" href="assets/system-bus.css">
+  <link rel="stylesheet" href="assets/guides.css">
+  <script>
+    // Apply a saved theme before first paint; storage may be unavailable on file://.
+    try {
+      var savedTheme = localStorage.getItem('prism-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') document.documentElement.setAttribute('data-theme', savedTheme);
+      // Wide screens: restore a hidden sidebar before first paint.
+      if (localStorage.getItem('prism-nav') === 'hidden') document.documentElement.classList.add('nav-hidden');
+    } catch (error) { /* keep the system preference */ }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar">
+    <button class="icon-button menu-button" type="button" aria-expanded="false" aria-controls="sidebar" id="menu-button">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></svg>
+      <span class="visually-hidden" id="menu-label">Open navigation</span>
+    </button>
+    <a class="brand" href="#/" aria-label="Prism documentation home">
+      <svg class="brand-mark" viewBox="0 0 40 32" width="34" height="27" aria-hidden="true">
+        <path d="M1.5 20.5 L11 16.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M17 3.5 L28.5 27 L5.5 27 Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M22.3 14.6 L38.5 7.5" stroke="var(--c-system)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M23 16 L38.5 12.8" stroke="var(--c-mmio)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M23.6 17.3 L38.5 18.2" stroke="var(--c-bus)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M24.3 18.7 L38.5 23.5" stroke="var(--c-cache)" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-name">Prism</span>
+      <span class="brand-sub">documentation</span>
+    </a>
+    <div class="topbar-actions">
+      <button class="icon-button theme-button" type="button" id="theme-button">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>
+        <span class="visually-hidden" id="theme-label">Switch theme</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="sidebar" id="sidebar" aria-label="Documentation">
+      <div class="sidebar-head">
+        <span class="sidebar-title">Contents</span>
+        <button class="icon-button close-button" type="button" id="close-button">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span class="visually-hidden">Close navigation</span>
+        </button>
+      </div>
+      <p class="nav-group">Start</p>
+      <ul class="nav-list">
+        <li><a href="#/">Overview</a></li>
+        <li><a href="#/guides/getting-started">Getting started</a></li>
+        <li><a href="#/guides">All guides</a></li>
+      </ul>
+      <p class="nav-group">Firmware</p>
+      <ul class="nav-list">
+        <li><a href="#/reference/address-map">Address map</a></li>
+        <li><a href="#/reference/peripherals">Peripheral concepts</a></li>
+        <li><a href="#/reference/platformio">PlatformIO build</a></li>
+      </ul>
+      <p class="nav-group">RTL</p>
+      <ul class="nav-list">
+        <li class="nav-parent">
+          <div class="nav-row">
+            <a href="#/architecture">Architecture</a>
+            <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-architecture" data-nav-label="architecture pages">
+              <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span class="visually-hidden">Show architecture pages</span>
+            </button>
+          </div>
+          <ul class="nav-list nav-sub" id="nav-architecture" hidden>
+            <li class="nav-parent">
+              <div class="nav-row">
+                <a href="#/architecture/datapath">Core datapath</a>
+                <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-cores" data-nav-label="core pages">
+                  <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  <span class="visually-hidden">Show core pages</span>
+                </button>
+              </div>
+              <ul class="nav-list nav-sub" id="nav-cores" hidden>
+                <li><a href="#/architecture/datapath/singlecycle">Singlecycle core</a></li>
+                <li><a href="#/architecture/datapath/base">Base core</a></li>
+                <li><a href="#/architecture/datapath/hazard3">Hazard3 core</a></li>
+              </ul>
+            </li>
+            <li><a href="#/architecture/caches">Local caches</a></li>
+            <li><a href="#/architecture/coherent-bus">Coherent bus <span class="nav-tag">in development</span></a></li>
+            <li><a href="#/architecture/system-bus">System bus and interrupts</a></li>
+            <li><a href="#/architecture/accelerators">Accelerators <span class="nav-tag">WIP</span></a></li>
+          </ul>
+        </li>
+        <li><a href="#/tutorials/instantiate-core">Build a SoC and run a program</a></li>
+        <li><a href="#/tutorials/hazard3">Use Hazard3</a></li>
+        <li><a href="#/tutorials/custom-tile">Write your own core</a></li>
+        <li><a href="#/tutorials/systems">Put SoCs on a board</a></li>
+      </ul>
+      <p class="nav-group">Create and share</p>
+      <ul class="nav-list">
+        <li><a href="#/tools/peripheral-docs">Generate peripheral docs</a></li>
+        <li><a href="#/tools/peripheral-docs-contract">Peripheral docs contract</a></li>
+      </ul>
+      <p class="nav-group">Project</p>
+      <ul class="nav-list">
+        <li><a href="#/roadmap">Roadmap</a></li>
+      </ul>
+    </nav>
+    <div class="backdrop" id="backdrop" hidden></div>
+
+    <main id="main" tabindex="-1">
+      <noscript>
+        <div class="notice notice-error">
+          <h1>JavaScript is off</h1>
+          <p>This documentation renders its pages with local JavaScript. Enable JavaScript to read it.</p>
+        </div>
+      </noscript>
+    </main>
+  </div>
+
+  <div class="visually-hidden" aria-live="polite" id="announcer"></div>
+
+  <!-- Generated by the website build; defines window.PRISM_REFERENCE. Must load before the app. -->
+  <script src="data/reference.js"></script>
+  <script src="data/toml.js"></script>
+  <script src="data/tooling.js"></script>
+  <script src="data/roadmap.js"></script>
+  <script src="data/tutorials.js"></script>
+  <script src="data/guides.js"></script>
+  <script src="data/core-traces.js"></script>
+  <script src="data/sim-models.js"></script>
+  <script src="assets/core-diagrams.js"></script>
+  <script src="assets/core-model-singlecycle.js"></script>
+  <script src="assets/core-model-base.js"></script>
+  <script src="assets/core-model-hazard3.js"></script>
+  <script src="assets/rv-asm.js"></script>
+  <script src="assets/core-trace-compiler.js"></script>
+  <script src="assets/core-sim.js"></script>
+  <script src="assets/core-editor.js"></script>
+  <!-- The WIP coherence model is separate from the RTL-backed local caches. -->
+  <script src="assets/cache-model.js"></script>
+  <script src="assets/cache-explorer.js"></script>
+  <script src="assets/cache-coherence-model.js"></script>
+  <script src="assets/cache-coherence.js"></script>
+  <script src="assets/system-bus-model.js"></script>
+  <script src="assets/system-bus.js"></script>
+  <script src="assets/peripheral-docs.js"></script>
+  <script src="assets/peripheral-guide.js"></script>
+  <script src="assets/guides.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

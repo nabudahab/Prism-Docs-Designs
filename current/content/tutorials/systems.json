@@ -1,0 +1,127 @@
+{
+  "schema": "prism-tutorial-v2",
+  "key": "systems",
+  "title": "Put SoCs on a board",
+  "nav_title": "Put SoCs on a board",
+  "lede": "Write a system manifest that places one or more SoCs on a Nexys Video, sets their clocks and connects their signals to board pins, then program the board and upload a program to each SoC.",
+  "audience": "both",
+  "prerequisites": [
+    "A SoC manifest and a working compiler, as in [Build a SoC and run a program on it](#/tutorials/instantiate-core).",
+    "A Nexys Video, and Vivado with Artix-7 support."
+  ],
+  "outcome": "A system manifest with one or more SoCs running programs on the board.",
+  "stages": [
+    {
+      "id": "system",
+      "title": "Create the system manifest",
+      "text": "A system manifest lists each SoC, the clock it runs on and the board pins its signals use. Start with one SoC.",
+      "guide": [
+        {
+          "doc": "docs/configuration.md",
+          "section": "2. Create your system manifest"
+        }
+      ],
+      "see": [
+        {
+          "href": "#/architecture",
+          "text": "Architecture"
+        }
+      ]
+    },
+    {
+      "id": "pins",
+      "title": "Connect signals to board pins",
+      "text": "Each line under `[board.pins]` names a board resource and the SoC signal it carries. Move GPIO from the LEDs to a PMOD connector to see how one edit changes the wiring.",
+      "guide": [
+        {
+          "doc": "docs/configuration.md",
+          "section": "9. Change board pins"
+        },
+        {
+          "doc": "docs/fpga.md",
+          "section": "4. Connect signals to board pins"
+        },
+        {
+          "doc": "docs/fpga.md",
+          "section": "Board resources"
+        }
+      ]
+    },
+    {
+      "id": "clock",
+      "title": "Set the CPU clock",
+      "text": "The CPU clock is one number in `[clocks]`. The board can generate only certain frequencies, and the design must pass timing at the one you ask for.",
+      "guide": [
+        {
+          "doc": "docs/configuration.md",
+          "section": "8. Change the CPU clock"
+        },
+        {
+          "doc": "docs/fpga.md",
+          "section": "2. Handle a clock or timing failure"
+        }
+      ]
+    },
+    {
+      "id": "program",
+      "title": "Build and program the board",
+      "text": "Check and lint the system first, since both are fast; then build the bitstream and program the FPGA.",
+      "guide": [
+        {
+          "doc": "docs/fpga.md",
+          "section": "1. Build a bitstream"
+        },
+        {
+          "doc": "docs/fpga.md",
+          "section": "3. Program the FPGA"
+        }
+      ]
+    },
+    {
+      "id": "second-soc",
+      "title": "Add a second SoC",
+      "text": "A second SoC is a second entry in the system manifest. The two SoCs share no memory. A UART bridge lets both use the one USB serial cable.",
+      "guide": [
+        {
+          "doc": "docs/configuration.md",
+          "section": "10. Add a second SoC"
+        }
+      ]
+    },
+    {
+      "id": "upload",
+      "title": "Upload a program to each SoC",
+      "text": "Export the software target for each SoC, build a program against it and upload. With a bridge, the upload command names the SoC to load.",
+      "guide": [
+        {
+          "doc": "docs/uart_upload.md",
+          "section": "1. Upload an application"
+        },
+        {
+          "doc": "docs/uart_upload.md",
+          "section": "3. Upload to several SoCs"
+        }
+      ],
+      "see": [
+        {
+          "href": "#/reference/platformio",
+          "text": "PlatformIO build"
+        }
+      ]
+    }
+  ],
+  "next": [
+    {
+      "href": "#/guides/configuration",
+      "text": "Change your hardware"
+    },
+    {
+      "href": "#/tutorials/custom-tile",
+      "text": "Write your own core"
+    },
+    {
+      "href": "#/reference/address-map",
+      "text": "Address map"
+    }
+  ]
+}

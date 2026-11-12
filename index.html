@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prism website: three design directions</title>
+  <meta name="color-scheme" content="light dark">
+  <style>
+    :root { --paper: #FAFAF9; --ink: #16181D; --muted: #5B626E; --rule: #D9DCE1; --link: #2140C4; --band: #F0F1F3; color-scheme: light dark; }
+    @media (prefers-color-scheme: dark) { :root { --paper: #111317; --ink: #E6E8EC; --muted: #A1A8B4; --rule: #2C313A; --link: #9DB3FF; --band: #1A1D23; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 1rem/1.6 system-ui, -apple-system, "Segoe UI", "Noto Sans", Arial, sans-serif; }
+    main { max-width: 76rem; margin: 0 auto; padding: 2.5rem clamp(1rem, 4vw, 3rem) 5rem; }
+    h1 { margin: 0; font-size: clamp(1.8rem, 1.3rem + 2vw, 2.5rem); line-height: 1.15; letter-spacing: -0.015em; }
+    h2 { margin: 4rem 0 0; padding-top: 1.25rem; border-top: 2px solid var(--ink); font-size: 1.7rem; line-height: 1.2; }
+    h3 { margin: 1.75rem 0 0; font-size: 1.05rem; }
+    p { margin: 0.6rem 0 0; max-width: 46rem; }
+    a { color: var(--link); text-underline-offset: 0.18em; }
+    :focus-visible { outline: 3px solid var(--link); outline-offset: 2px; }
+    .lede { font-size: 1.15rem; color: var(--muted); }
+    .jump { display: flex; flex-wrap: wrap; gap: 0.4rem 1.5rem; margin: 1.5rem 0 0; padding: 0.8rem 0; border-block: 1px solid var(--rule); list-style: none; }
+    .open { display: inline-block; margin-top: 1rem; padding: 0.6rem 1.1rem; border: 1.5px solid var(--ink); border-radius: 6px; color: var(--ink); font-weight: 650; text-decoration: none; }
+    .open:hover { background: var(--ink); color: var(--paper); }
+    .shots { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 0.9rem; margin: 1.75rem 0 0; }
+    figure { margin: 0; grid-column: span 4; }
+    figure.wide { grid-column: span 8; }
+    figure.phone { grid-column: span 2; }
+    figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; background: #fff; }
+    figcaption { margin-top: 0.3rem; font-size: 0.86rem; color: var(--muted); }
+    .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 0 2rem; margin: 1.5rem 0 0; }
+    .facts div { padding: 0.7rem 0; border-top: 1px solid var(--rule); }
+    .facts dt { font-size: 0.86rem; color: var(--muted); }
+    .facts dd { margin: 0.1rem 0 0; }
+    .verdict { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 0 3rem; }
+    ul { margin: 0.5rem 0 0; padding-left: 1.2rem; max-width: 44rem; }
+    li + li { margin-top: 0.3rem; }
+    .scroll { margin-top: 1.25rem; overflow-x: auto; }
+    table { width: 100%; min-width: 46rem; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding: 0.55rem 0.9rem 0.55rem 0; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+    thead th { font-size: 0.86rem; border-bottom: 2px solid var(--ink); }
+    tbody th { font-weight: 600; width: 15rem; }
+    .note { margin-top: 1.25rem; padding: 0.9rem 1.1rem; background: var(--band); border-left: 3px solid var(--ink); max-width: 48rem; }
+    @media (max-width: 760px) { figure, figure.wide { grid-column: span 12; } figure.phone { grid-column: span 6; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Prism website: three design directions</h1>
+  <p class="lede">Each direction is a complete, navigable site. All three, and a copy of the current site for reference, are built from one content snapshot: the same pages, data, simulators and register reference. Only the shell, navigation and visual system differ.</p>
+  <ul class="jump">
+    <li><a href="#datasheet">Datasheet</a></li>
+    <li><a href="#coursebook">Coursebook</a></li>
+    <li><a href="#exploded">Exploded view</a></li>
+    <li><a href="#evaluation">Evaluation</a></li>
+    <li><a href="#recommendation">Recommendation</a></li>
+    <li><a href="current/index.html">Current site</a></li>
+  </ul>
+  <p class="current"><a class="open" href="current/index.html">Open the current site</a> The site as it is today, built from the same content snapshot, for reading against the three directions.</p>
+
+  <section id="datasheet">
+    <h2>Datasheet</h2>
+    <p class="lede">Prism as a reference manual. A navy title band, a full contents tree, ruled tables and a memory-map figure, in the manner of a semiconductor reference manual.</p>
+    <a class="open" href="datasheet/index.html">Open Datasheet</a>
+    <div class="shots">
+      <figure class="wide"><img src="compare/datasheet-home.png" alt="Datasheet landing page: headline beside a figure of the address space, then task lists." loading="lazy"><figcaption>Landing: the address space as the opening figure</figcaption></figure>
+      <figure><img src="compare/datasheet-address-map.png" alt="Datasheet address map with a ruled register table and an outline rail." loading="lazy"><figcaption>Address map with the outline and address-space rail</figcaption></figure>
+      <figure><img src="compare/datasheet-guide.png" alt="Datasheet guide page with sections opened by full-width rules." loading="lazy"><figcaption>Guide</figcaption></figure>
+      <figure><img src="compare/datasheet-datapath.png" alt="Datasheet core datapath page with segmented layer tabs." loading="lazy"><figcaption>Core datapath simulator</figcaption></figure>
+      <figure><img src="compare/datasheet-tutorial.png" alt="Datasheet tutorial page." loading="lazy"><figcaption>Tutorial</figcaption></figure>
+      <figure class="phone"><img src="compare/datasheet-phone-home.png" alt="Datasheet landing page on a phone." loading="lazy"><figcaption>Phone</figcaption></figure>
+      <figure class="phone"><img src="compare/datasheet-phone-nav.png" alt="Datasheet contents drawer on a phone." loading="lazy"><figcaption>Contents drawer</figcaption></figure>
+      <figure class="phone"><img src="compare/datasheet-phone-guide.png" alt="Datasheet guide on a phone." loading="lazy"><figcaption>Guide</figcaption></figure>
+      <figure class="phone"><img src="compare/datasheet-phone-datapath.png" alt="Datasheet datapath on a phone." loading="lazy"><figcaption>Datapath</figcaption></figure>
+      <figure><img src="compare/datasheet-dark.png" alt="Datasheet in the dark theme." loading="lazy"><figcaption>Dark theme</figcaption></figure>
+    </div>
+    <dl class="facts">
+      <div><dt>Layout</dt><dd>Three panes: contents tree, page, and a rail with the page outline. Dense, 15px base.</dd></div>
+      <div><dt>Navigation</dt><dd>Every page is in the tree; guides fold by group. Find (<kbd>/</kbd>) matches pages, guide sections, registers and fields, and resolves an address such as <code>0x40020008</code>.</dd></div>
+      <div><dt>Type</dt><dd>Barlow, after the DIN lettering of engineering drawings, with a semi-condensed cut for labels; IBM Plex Mono for addresses and code.</dd></div>
+      <div><dt>Technical content</dt><dd>Tables ruled with a header band. An address-space figure, drawn from the generated memory map, opens the landing page and follows the reference pages as a jump list.</dd></div>
+    </dl>
+    <div class="verdict">
+      <div><h3>Strengths</h3><ul>
+        <li>Fastest lookup of the three: one click to any page, one query to any register or address.</li>
+        <li>Shows the most per screen, which suits register tables and the manifest reference.</li>
+        <li>Reads as an engineering tool, in line with the plain copy the site already uses.</li>
+        <li>Closest in structure to the current site, so the least to relearn.</li>
+      </ul></div>
+      <div><h3>Weaknesses</h3><ul>
+        <li>Least guidance for a newcomer: the landing page is a reference sheet, not an introduction.</li>
+        <li>Small, narrow type is the least comfortable for long guides and for low-vision readers.</li>
+        <li>The tree and rail leave the simulators the least width unless the reader hides the tree.</li>
+        <li>The most conventional of the three as a first impression of the project.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="coursebook">
+    <h2>Coursebook</h2>
+    <p class="lede">Prism as a course text. A reading column on an engineering pad, an ordered outline with previous and next on every page, and progress that is remembered.</p>
+    <a class="open" href="coursebook/index.html">Open Coursebook</a>
+    <div class="shots">
+      <figure class="wide"><img src="compare/coursebook-guide.png" alt="Coursebook guide page: serif reading column, course outline with the current page highlighted, and a margin outline." loading="lazy"><figcaption>Guide: outline, reading column and margin</figcaption></figure>
+      <figure><img src="compare/coursebook-home.png" alt="Coursebook landing page with the prism illustration on grid paper." loading="lazy"><figcaption>Landing, followed by three reading routes</figcaption></figure>
+      <figure><img src="compare/coursebook-tutorial.png" alt="Coursebook tutorial with stages that can be ticked off." loading="lazy"><figcaption>Tutorial as a checklist</figcaption></figure>
+      <figure><img src="compare/coursebook-address-map.png" alt="Coursebook address map." loading="lazy"><figcaption>Address map</figcaption></figure>
+      <figure><img src="compare/coursebook-datapath.png" alt="Coursebook core datapath page." loading="lazy"><figcaption>Core datapath simulator</figcaption></figure>
+      <figure class="phone"><img src="compare/coursebook-phone-guide.png" alt="Coursebook guide on a phone with a reading dock at the bottom." loading="lazy"><figcaption>Phone, with the reading dock</figcaption></figure>
+      <figure class="phone"><img src="compare/coursebook-phone-nav.png" alt="Coursebook outline drawer on a phone." loading="lazy"><figcaption>Outline drawer</figcaption></figure>
+      <figure class="phone"><img src="compare/coursebook-phone-home.png" alt="Coursebook landing on a phone." loading="lazy"><figcaption>Landing</figcaption></figure>
+      <figure class="phone"><img src="compare/coursebook-phone-datapath.png" alt="Coursebook datapath on a phone." loading="lazy"><figcaption>Datapath</figcaption></figure>
+      <figure><img src="compare/coursebook-dark.png" alt="Coursebook in its chalkboard dark theme." loading="lazy"><figcaption>Dark theme: a chalkboard</figcaption></figure>
+    </div>
+    <dl class="facts">
+      <div><dt>Layout</dt><dd>A book: course outline, a reading column of about 75 characters a line at 18px, and a margin with this page's sections.</dd></div>
+      <div><dt>Navigation</dt><dd>The site in one reading order, in units. Previous and next on every page, and a dock with both at the bottom of a phone. Pages you have opened are marked, per unit.</dd></div>
+      <div><dt>Type</dt><dd>Charis SIL for prose; Atkinson Hyperlegible, drawn to keep 1, l and I or 0 and O apart, for labels, tables and code.</dd></div>
+      <div><dt>Technical content</dt><dd>Tutorial stages become a checklist that is saved in the browser. The guide index lists every guide with its stated goal. The prism illustration is kept, on grid paper.</dd></div>
+    </dl>
+    <div class="verdict">
+      <div><h3>Strengths</h3><ul>
+        <li>The most comfortable long-form reading: larger type, shorter lines, generous leading.</li>
+        <li>A student always knows where they are, what comes next and what they have done.</li>
+        <li>Strongest on a phone for reading: previous, outline and next stay within reach.</li>
+        <li>Typefaces chosen for legibility of code-like text.</li>
+      </ul></div>
+      <div><h3>Weaknesses</h3><ul>
+        <li>Slowest for lookup: reference pages sit in the last unit, and the outline folds.</li>
+        <li>The reading order is an editorial decision this prototype made; it needs the owner's review.</li>
+        <li>Reads as teaching material, which may undersell the project to an industrial evaluator.</li>
+        <li>Progress lives in one browser only, and the dock takes a strip of a phone screen.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="exploded">
+    <h2>Exploded view</h2>
+    <p class="lede">Prism as a platform site. Black type on white with the four contract colours as the only colour, sections in a top bar, and a landing page that opens on the SoC drawn apart into its layers.</p>
+    <a class="open" href="exploded/index.html">Open Exploded view</a>
+    <div class="shots">
+      <figure class="wide"><img src="compare/exploded-home.png" alt="Exploded view landing page: white headline on black beside four stacked layers in the contract colours." loading="lazy"><figcaption>Landing: system, peripherals, memory fabric and processor tile, each linked to its pages</figcaption></figure>
+      <figure><img src="compare/exploded-datapath.png" alt="Exploded view core datapath page using the full width." loading="lazy"><figcaption>Core datapath simulator at full width</figcaption></figure>
+      <figure><img src="compare/exploded-guide.png" alt="Exploded view guide page with a centred reading column." loading="lazy"><figcaption>Guide</figcaption></figure>
+      <figure><img src="compare/exploded-address-map.png" alt="Exploded view address map." loading="lazy"><figcaption>Address map</figcaption></figure>
+      <figure><img src="compare/exploded-guides.png" alt="Exploded view guide index in grouped columns." loading="lazy"><figcaption>Guide index</figcaption></figure>
+      <figure class="phone"><img src="compare/exploded-phone-home.png" alt="Exploded view landing on a phone." loading="lazy"><figcaption>Phone</figcaption></figure>
+      <figure class="phone"><img src="compare/exploded-phone-nav.png" alt="Exploded view menu sheet on a phone." loading="lazy"><figcaption>Menu sheet</figcaption></figure>
+      <figure class="phone"><img src="compare/exploded-phone-guide.png" alt="Exploded view guide on a phone." loading="lazy"><figcaption>Guide</figcaption></figure>
+      <figure class="phone"><img src="compare/exploded-phone-datapath.png" alt="Exploded view datapath on a phone." loading="lazy"><figcaption>Datapath</figcaption></figure>
+      <figure><img src="compare/exploded-dark.png" alt="Exploded view in the dark theme." loading="lazy"><figcaption>Dark theme</figcaption></figure>
+    </div>
+    <dl class="facts">
+      <div><dt>Layout</dt><dd>No side rails. Pages are centred, and the simulators take the full window. A slim strip with the path and this page's sections stays in view.</dd></div>
+      <div><dt>Navigation</dt><dd>Five sections in a top bar; each opens a panel of its pages with one-line descriptions. All pages again in the foot. Search (<kbd>/</kbd>) as in Datasheet.</dd></div>
+      <div><dt>Type</dt><dd>Archivo, from normal width for reading to its expanded width for headings, after instrument faceplates; Commit Mono for code.</dd></div>
+      <div><dt>Technical content</dt><dd>The landing figure takes its layer names from the canonical illustration and links each layer to its pages. Tables are open, with rules only between rows.</dd></div>
+    </dl>
+    <div class="verdict">
+      <div><h3>Strengths</h3><ul>
+        <li>The strongest first impression, and the figure explains the layering before any text is read.</li>
+        <li>Gives the simulators the most room, about 220 to 270 pixels more than the other two at 1440.</li>
+        <li>Section panels show a whole area at once, such as all 26 guides in their groups.</li>
+        <li>Three reader routes sit directly under the landing figure.</li>
+      </ul></div>
+      <div><h3>Weaknesses</h3><ul>
+        <li>No list of sibling pages while reading: moving between guides means reopening a panel.</li>
+        <li>The page outline is behind a button, not in view.</li>
+        <li>Closest of the three to a product site, though the copy is unchanged and plain.</li>
+        <li>The landing figure is an illustration of the layers, not a drawing of the hardware.</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section id="evaluation">
+    <h2>Evaluation</h2>
+    <p>Measured in headless Chrome on the built sites: 27 representative pages at five screen sizes from 320 to 1440 pixels, both themes, and the interactive tools. The same checks ran on the current site.</p>
+    <div class="scroll"><table>
+      <thead><tr><th scope="col">Check</th><th scope="col">Datasheet</th><th scope="col">Coursebook</th><th scope="col">Exploded view</th><th scope="col">Current</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Script errors, 135 page loads</th><td>None</td><td>None</td><td>None</td><td>None</td></tr>
+        <tr><th scope="row">Sideways scrolling, 320 to 1440</th><td>None</td><td>None</td><td>None</td><td>None</td></tr>
+        <tr><th scope="row">Simulators and tools</th><td colspan="4">Identical results in all four: the Base core runs an assembled program to its halt, the cycle slider seeks, both cache explorers and the bus view mount, the address map resolves <code>0x40020008</code> to <code>uart.status</code>.</td></tr>
+        <tr><th scope="row">Controls without a name; fields without a label</th><td>None</td><td>None</td><td>None</td><td>None</td></tr>
+        <tr><th scope="row">Shell touch targets under 40px</th><td>None</td><td>None</td><td>None</td><td>Brand link</td></tr>
+        <tr><th scope="row">Body text on page, contrast</th><td>17.3 : 1</td><td>14.5 : 1</td><td>21 : 1</td><td>15.2 : 1</td></tr>
+        <tr><th scope="row">Lowest text contrast, either theme</th><td>4.7 : 1</td><td>5.0 : 1</td><td>5.0 : 1</td><td>4.3 : 1</td></tr>
+        <tr><th scope="row">Guide prose, desktop</th><td>15px, about 80 characters a line</td><td>18px, about 75</td><td>17px, about 78</td><td>16px, about 88</td></tr>
+        <tr><th scope="row">Width for a simulator at 1440</th><td>1121px</td><td>1072px</td><td>1344px</td><td>1064px</td></tr>
+        <tr><th scope="row">Clicks from a guide to another guide</th><td>1, or 2 across groups</td><td>1, or 2 across units</td><td>2</td><td>2</td></tr>
+        <tr><th scope="row">Find a register or address from any page</th><td>Yes</td><td>Yes</td><td>Yes</td><td>On the address map only</td></tr>
+        <tr><th scope="row">Keyboard</th><td colspan="3">Skip link first; <kbd>/</kbd> or Ctrl K opens search; arrows and Enter choose; Escape closes panels and returns focus.</td><td>Skip link first</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Fit by reader</h3>
+    <div class="scroll"><table>
+      <thead><tr><th scope="col">Reader</th><th scope="col">Datasheet</th><th scope="col">Coursebook</th><th scope="col">Exploded view</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Students</th><td>Adequate. Everything is findable, little is sequenced.</td><td>Best. Ordered reading, saved progress, checklists.</td><td>Good. Routes on the landing page; no sequence after that.</td></tr>
+        <tr><th scope="row">Researchers</th><td>Best. Lookup, manifest keys and interfaces are a query away.</td><td>Good for a first pass; slower on return visits.</td><td>Good. Panels expose the configuration and experiment guides early.</td></tr>
+        <tr><th scope="row">Engineering teams</th><td>Best for daily reference once adopted.</td><td>Adequate. The tone is instructional.</td><td>Best for evaluation: what it is, what ships, where to start.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="note">Not measured here: screen-reader passes with a real reader, colour-vision simulation, and reading tests with students. The checks above are structural; they do not replace those.</p>
+  </section>
+
+  <section id="recommendation">
+    <h2>Recommendation</h2>
+    <p>Use <strong>Exploded view</strong> as the shell, and carry two things over from the others. Its full-width pages suit the simulators, which are the site's most distinctive content, and its landing page serves a first-time evaluator best.</p>
+    <ul>
+      <li>From Coursebook: previous and next on guides and tutorials, and the tutorial checklist. They cover Exploded view's weakest point, moving between guides, and they are what students gain most from.</li>
+      <li>From Datasheet: the address-space figure on the address map. It is the quickest way to jump between regions.</li>
+    </ul>
+    <p>If the site should stay a pure reference manual with no landing page to speak of, Datasheet alone is the safer choice. The three share one runtime, so these borrowings are small.</p>
+  </section>
+</main>
+</body>
+</html>

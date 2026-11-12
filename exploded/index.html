@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" data-design="exploded">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prism documentation</title>
+  <meta name="description" content="Prism: a bare-metal SoC in synthesizable SystemVerilog for firmware and RTL engineers. Architecture overview, firmware address map and PlatformIO build reference.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="assets/prism-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/canon.css">
+  <link rel="stylesheet" href="assets/design/design.css">
+  <script>
+    // Apply a saved theme before first paint; storage may be unavailable on file://.
+    try {
+      var savedTheme = localStorage.getItem('prism-theme');
+      if (savedTheme === 'light' || savedTheme === 'dark') document.documentElement.setAttribute('data-theme', savedTheme);
+      // Wide screens: restore a hidden sidebar before first paint.
+      if (localStorage.getItem('prism-nav') === 'hidden') document.documentElement.classList.add('nav-hidden');
+    } catch (error) { /* keep the system preference */ }
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="ex-bar">
+    <a class="ex-brand" href="#/" aria-label="Prism documentation home">
+      <svg viewBox="0 0 44 32" width="38" height="28" aria-hidden="true">
+        <path d="M14 3 L27 29 L1 29 Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="miter"/>
+        <path d="M20.5 15 H43" stroke="var(--c-system)" stroke-width="2.4"/>
+        <path d="M22.5 19 H43" stroke="var(--c-mmio)" stroke-width="2.4"/>
+        <path d="M24.5 23 H43" stroke="var(--c-bus)" stroke-width="2.4"/>
+        <path d="M26.5 27 H43" stroke="var(--c-cache)" stroke-width="2.4"/>
+      </svg>
+      <span class="ex-brand-name">Prism</span>
+    </a>
+    <nav class="ex-nav" aria-label="Sections"><ul id="ex-nav"></ul></nav>
+    <div class="ex-tools">
+      <button class="ex-tool ex-find" type="button" id="ex-find" aria-haspopup="dialog">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M15.2 15.2l5.3 5.3" stroke="currentColor" stroke-width="2"/></svg>
+        <span>Search</span>
+      </button>
+      <button class="ex-tool" type="button" id="theme-button">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/></svg>
+        <span class="visually-hidden" id="theme-label">Switch theme</span>
+      </button>
+      <button class="ex-tool ex-menu" type="button" aria-expanded="false" aria-controls="sidebar" id="menu-button">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 8h16M4 16h16" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+        <span class="visually-hidden" id="menu-label">Open navigation</span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="ex-sheet" id="sidebar" aria-label="All pages">
+    <div class="ex-sheet-head">
+      <span>Prism</span>
+      <button class="ex-tool" type="button" id="close-button">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2"/></svg>
+        <span class="visually-hidden">Close navigation</span>
+      </button>
+    </div>
+    <div id="ex-sheet"></div>
+  </nav>
+  <div class="backdrop" id="backdrop" hidden></div>
+
+  <div class="ex-local" id="ex-local" hidden>
+    <a class="ex-local-home" href="#/" aria-label="Prism documentation home">
+      <svg viewBox="0 0 28 28" width="18" height="18" aria-hidden="true"><path d="M14 3 L26 26 L2 26 Z" fill="none" stroke="currentColor" stroke-width="2.6"/></svg>
+    </a>
+    <nav aria-label="You are here"><ol class="ex-trail" id="ex-trail"></ol></nav>
+    <details class="ex-onpage" id="ex-onpage" hidden>
+      <summary>On this page</summary>
+      <div class="ex-onpage-list" id="ex-onpage-list"></div>
+    </details>
+  </div>
+
+  <main id="main" tabindex="-1">
+    <noscript>
+      <div class="notice notice-error">
+        <h1>JavaScript is off</h1>
+        <p>This documentation renders its pages with local JavaScript. Enable JavaScript to read it.</p>
+      </div>
+    </noscript>
+  </main>
+
+  <footer class="ex-foot">
+    <nav class="ex-foot-map" id="ex-foot" aria-label="All pages by section"></nav>
+  </footer>
+
+  <dialog class="ex-search" id="ex-search" aria-label="Search">
+    <div class="ex-search-field">
+      <label class="visually-hidden" for="ex-query">Search pages, guide sections, registers and addresses</label>
+      <input id="ex-query" type="search" autocomplete="off" spellcheck="false" placeholder="Search pages, sections, registers, 0x addresses">
+      <button class="ex-tool" type="button" id="ex-search-close"><span>Close</span></button>
+    </div>
+    <p class="ex-search-status" id="ex-search-status" role="status"></p>
+    <ul class="ex-results" id="ex-results" hidden></ul>
+  </dialog>
+
+  <div class="visually-hidden" aria-live="polite" id="announcer"></div>
+
+  <script src="data/reference.js"></script>
+  <script src="data/toml.js"></script>
+  <script src="data/tooling.js"></script>
+  <script src="data/roadmap.js"></script>
+  <script src="data/tutorials.js"></script>
+  <script src="data/guides.js"></script>
+  <script src="data/core-traces.js"></script>
+  <script src="data/sim-models.js"></script>
+  <script src="assets/core-diagrams.js"></script>
+  <script src="assets/core-model-singlecycle.js"></script>
+  <script src="assets/core-model-base.js"></script>
+  <script src="assets/core-model-hazard3.js"></script>
+  <script src="assets/rv-asm.js"></script>
+  <script src="assets/core-trace-compiler.js"></script>
+  <script src="assets/core-sim.js"></script>
+  <script src="assets/core-editor.js"></script>
+  <script src="assets/cache-model.js"></script>
+  <script src="assets/cache-explorer.js"></script>
+  <script src="assets/cache-coherence-model.js"></script>
+  <script src="assets/cache-coherence.js"></script>
+  <script src="assets/system-bus-model.js"></script>
+  <script src="assets/system-bus.js"></script>
+  <script src="assets/peripheral-docs.js"></script>
+  <script src="assets/peripheral-guide.js"></script>
+  <script src="assets/guides.js"></script>
+  <script src="assets/app.js"></script>
+  <script src="data/nav.js"></script>
+  <script src="assets/design/kit.js"></script>
+  <script src="assets/design/design.js"></script>
+</body>
+</html>
